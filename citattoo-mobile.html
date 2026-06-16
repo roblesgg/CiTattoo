@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+<title>CiTattoo</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;background:#f5f5f5;color:#0a0a0a;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif}
+body{display:flex;flex-direction:column;height:100dvh}
+
+:root{
+  --bg:#f5f5f5;--white:#ffffff;
+  --border:#e8e8e8;--border2:#d0d0d0;
+  --text:#0a0a0a;--text2:#666;--text3:#bbb;
+  --accent:#0a0a0a;--accent2:#f0f0f0;
+  --red:#e53935;--green:#2e7d32;--orange:#e65100;
+}
+
+/* ── TOPBAR ── */
+.topbar{height:52px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:10px;flex-shrink:0}
+.logo{font-size:17px;font-weight:800;letter-spacing:-.5px;color:var(--text)}
+.logo em{font-style:normal;color:var(--text)}
+.tb-back{display:flex;align-items:center;cursor:pointer;padding:4px 8px 4px 0}
+.tb-title{font-size:14px;font-weight:600;flex:1;color:var(--text)}
+.tb-action{font-size:12px;font-weight:600;margin-left:auto;cursor:pointer;color:var(--text2);display:flex;align-items:center;gap:4px}
+
+/* ── DISCOVER TABS ── */
+.dtabs{background:var(--white);border-bottom:1px solid var(--border);display:flex;flex-shrink:0;overflow-x:auto;scrollbar-width:none}
+.dtabs::-webkit-scrollbar{display:none}
+.dtab{flex-shrink:0;padding:12px 16px;font-size:12px;font-weight:600;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s}
+.dtab.on{color:var(--text);border-bottom-color:var(--text)}
+
+/* ── MAIN ── */
+.main{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;background:var(--bg)}
+.screen{display:none}.screen.on{display:block}
+
+/* ── BOTTOM NAV ── */
+.bnav{background:var(--white);border-top:1px solid var(--border);display:flex;flex-shrink:0;padding-bottom:env(safe-area-inset-bottom,4px)}
+.nt{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 4px 4px;cursor:pointer;gap:4px}
+.nt svg{opacity:.35;transition:opacity .15s}
+.nt-l{font-size:9px;color:var(--text3);font-weight:600;letter-spacing:.3px}
+.nt.on svg{opacity:1}
+.nt.on .nt-l{color:var(--text)}
+
+/* ── INPUTS / BUTTONS ── */
+.input{width:100%;background:var(--white);border:1px solid var(--border2);border-radius:10px;padding:13px 14px;color:var(--text);font-size:14px;outline:none;margin-bottom:10px;font-family:inherit}
+.input:focus{border-color:var(--text)}
+.btn{width:100%;padding:14px;border:none;border-radius:100px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .12s;letter-spacing:-.1px}
+.btn-solid{background:var(--accent);color:#fff}
+.btn-solid:active{background:#333}
+.btn-outline{background:transparent;border:1px solid var(--border2);color:var(--text2)}
+.btn-outline:active{background:var(--bg)}
+.pill{display:inline-flex;align-items:center;justify-content:center;border-radius:100px;font-size:12px;font-weight:600;cursor:pointer;transition:all .12s;white-space:nowrap}
+.pill-sm{padding:6px 14px;font-size:11px}
+.pill-dark{background:var(--accent);color:#fff;border:none}
+.pill-outline{background:transparent;color:var(--text);border:1px solid var(--border2)}
+
+/* ── ICON BUTTON ── */
+.icon-btn{background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:8px;border-radius:50%;transition:background .12s}
+.icon-btn:active{background:var(--bg)}
+
+/* ── SEP ── */
+.sep{display:flex;align-items:center;gap:10px;margin:14px 0;color:var(--text3);font-size:11px}
+.sep::before,.sep::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── LOGIN ── */
+.login-wrap{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 28px;background:var(--white)}
+.login-logo{font-size:40px;font-weight:900;letter-spacing:-2px;margin-bottom:6px}
+.login-sub{font-size:12px;color:var(--text2);margin-bottom:48px;letter-spacing:.2px}
+
+/* ── ONBOARDING ── */
+.rol-wrap{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;background:var(--white)}
+.rol-title{font-size:24px;font-weight:800;margin-bottom:6px;letter-spacing:-.5px}
+.rol-sub{font-size:12px;color:var(--text2);margin-bottom:44px}
+.rol-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:28px 22px;margin-bottom:12px;cursor:pointer;transition:border-color .15s;text-align:left;width:100%}
+.rol-card:active{border-color:var(--accent)}
+.rol-card-icon{width:40px;height:40px;background:var(--bg);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.rol-card-title{font-size:15px;font-weight:700;margin-bottom:5px}
+.rol-card-desc{font-size:12px;color:var(--text2);line-height:1.6}
+
+/* ── MASONRY GRID (Pinterest) ── */
+.masonry{columns:2;column-gap:3px;padding:3px}
+.sq-item{break-inside:avoid;margin-bottom:3px;position:relative;cursor:pointer;overflow:hidden;border-radius:3px;background:var(--border);display:block}
+.sq-item-bg{width:100%;display:block;background:var(--border)}
+.sq-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.5));padding:10px 8px 8px;display:flex;align-items:flex-end;justify-content:space-between}
+.sq-artist{font-size:10px;color:#fff;font-weight:600;letter-spacing:.2px}
+.heart-btn{background:none;border:none;cursor:pointer;padding:2px;display:flex;align-items:center;justify-content:center}
+.heart-btn svg path{transition:all .15s}
+.heart-btn.saved svg path{fill:#fff;stroke:#fff}
+
+/* ── ESTUDIOS LIST ── */
+.estudio-list{display:flex;flex-direction:column;gap:1px;background:var(--border);margin-top:1px}
+.estudio-card{background:var(--white);cursor:pointer;overflow:hidden}
+.estudio-card:active{background:var(--bg)}
+.estudio-banner{height:120px;position:relative;background:var(--bg);overflow:hidden}
+.estudio-banner-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.estudio-banner-placeholder{width:100%;height:100%;background:var(--bg);display:flex;align-items:center;justify-content:center}
+.estudio-rating-chip{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);border-radius:100px;padding:4px 10px;display:flex;align-items:center;gap:5px}
+.estudio-rating-chip span{font-size:11px;font-weight:700;color:#fff}
+.estudio-heart-btn{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.9);border:none;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.estudio-av-wrap{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%)}
+.estudio-av{width:44px;height:44px;border-radius:50%;border:2px solid var(--white);background:var(--bg);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.estudio-body{padding:32px 16px 20px;text-align:center;border-top:none}
+.estudio-name{font-size:14px;font-weight:800;letter-spacing:.5px;margin-bottom:4px}
+.estudio-loc-row{display:flex;align-items:center;justify-content:center;gap:4px;color:var(--text2);font-size:11px;margin-bottom:4px}
+.estudio-tags{font-size:10px;color:var(--text3);letter-spacing:.3px}
+
+/* ── PROFESIONALES ── */
+.pro-list{display:flex;flex-direction:column;background:var(--white);margin-top:1px}
+.pro-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;background:var(--white);transition:background .1s}
+.pro-item:active{background:var(--bg)}
+.pro-av{width:44px;height:44px;border-radius:50%;background:var(--bg);flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;border:1px solid var(--border)}
+.pro-info{flex:1;min-width:0}
+.pro-name{font-size:13px;font-weight:700;margin-bottom:1px}
+.pro-city{font-size:11px;color:var(--text2);margin-bottom:2px}
+.pro-styles{font-size:10px;color:var(--text3);letter-spacing:.2px}
+
+/* ── OFERTAS ── */
+.oferta-list{display:flex;flex-direction:column;gap:1px;background:var(--border);margin-top:1px}
+.oferta-item{background:var(--white);padding:16px;cursor:pointer}
+.oferta-item:active{background:var(--bg)}
+.oferta-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.oferta-tag{font-size:9px;font-weight:700;letter-spacing:.8px;color:var(--text3);text-transform:uppercase;margin-bottom:6px}
+.oferta-name{font-size:14px;font-weight:700;margin-bottom:2px}
+.oferta-meta{font-size:11px;color:var(--text2)}
+.oferta-price-old{font-size:11px;color:var(--text3);text-decoration:line-through}
+.oferta-price{font-size:20px;font-weight:800;letter-spacing:-.5px}
+.oferta-bottom{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;border:1px solid var(--border);border-radius:100px;padding:3px 10px;font-size:10px;color:var(--text2);font-weight:500}
+
+/* ── PROYECTO DETALLE ── */
+.pd-photo{width:100%;aspect-ratio:1;background:var(--bg);display:flex;align-items:center;justify-content:center;position:relative}
+.pd-toggle-bar{display:flex;background:var(--white);border-bottom:1px solid var(--border)}
+.pd-tab{flex:1;padding:13px;text-align:center;font-size:12px;font-weight:600;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s}
+.pd-tab.on{color:var(--text);border-bottom-color:var(--text)}
+.pd-info{padding:18px 16px;background:var(--white)}
+.pd-save-btn{position:absolute;top:10px;right:10px;background:rgba(255,255,255,.9);border:none;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+
+/* ── PRO PERFIL ── */
+.pp-hero{background:var(--white);padding:20px 16px 18px;border-bottom:1px solid var(--border)}
+.pp-av{width:56px;height:56px;border-radius:50%;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.pp-name{font-size:18px;font-weight:800;letter-spacing:-.3px;margin-bottom:2px}
+.pp-meta{font-size:11px;color:var(--text2)}
+.pp-rating{font-size:11px;color:var(--text2);margin-top:3px}
+.pp-actions{display:flex;gap:8px;margin-top:14px}
+.pp-subtabs{background:var(--white);border-bottom:1px solid var(--border);display:flex}
+.pp-stab{flex:1;padding:12px 4px;text-align:center;font-size:11px;font-weight:600;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;letter-spacing:.2px}
+.pp-stab.on{color:var(--text);border-bottom-color:var(--text)}
+.pp-panel{display:none}.pp-panel.on{display:block}
+
+/* ── SERVICIOS ── */
+.svc-list{display:flex;flex-direction:column;gap:1px;background:var(--border)}
+.svc-item{background:var(--white);padding:16px;cursor:pointer}
+.svc-item:active{background:var(--bg)}
+.svc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px}
+.svc-name{font-size:13px;font-weight:700}
+.svc-price{font-size:16px;font-weight:800;letter-spacing:-.3px}
+.svc-desc{font-size:11px;color:var(--text2);line-height:1.5;margin-bottom:8px}
+
+/* ── TRABAJOS GRID ── */
+.trabajos-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px}
+.trabajo-item{aspect-ratio:1;background:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden}
+
+/* ── CITAS ── */
+.page-header{padding:20px 16px 4px;background:var(--white);border-bottom:1px solid var(--border)}
+.page-title{font-size:22px;font-weight:800;letter-spacing:-.5px}
+.page-sub{font-size:12px;color:var(--text2);margin-top:2px}
+.cita-card{background:var(--white);margin-top:1px;padding:16px;cursor:pointer;border-bottom:1px solid var(--border)}
+.cita-card:active{background:var(--bg)}
+.cita-artist-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.cita-av{width:36px;height:36px;border-radius:50%;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cita-name-col{flex:1}
+.cita-artist{font-size:12px;font-weight:700}
+.cita-studio{font-size:10px;color:var(--text2)}
+.cita-title{font-size:15px;font-weight:800;letter-spacing:-.3px;margin-bottom:3px}
+.cita-when{font-size:12px;color:var(--text2);margin-bottom:12px}
+.pbar{background:var(--bg);border-radius:2px;height:2px;overflow:hidden}
+.pfill{height:100%;border-radius:2px;background:var(--accent)}
+.pbar-label{font-size:10px;color:var(--text3);margin-top:4px}
+.cita-actions{display:flex;gap:6px;margin-top:14px}
+.cita-btn{flex:1;padding:9px 6px;border:1px solid var(--border);border-radius:100px;background:transparent;color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:5px}
+.cita-btn:active{background:var(--bg)}
+.status-pill{font-size:9px;font-weight:700;letter-spacing:.6px;padding:3px 9px;border-radius:100px;border:1px solid var(--border);color:var(--text2);text-transform:uppercase}
+.status-today{border-color:var(--text);color:var(--text);background:var(--text);color:#fff}
+.info-box{background:var(--bg);border-radius:8px;padding:10px 12px;font-size:11px;color:var(--text2);line-height:1.55;margin-bottom:2px}
+
+/* ── TATTOOS ── */
+.healing-card{background:var(--white);padding:18px 16px;border-bottom:1px solid var(--border);margin-top:1px}
+.healing-title{font-size:15px;font-weight:800;letter-spacing:-.3px;margin-bottom:2px}
+.healing-meta{font-size:11px;color:var(--text2);margin-bottom:14px}
+.healing-day-row{display:flex;align-items:center;gap:16px;margin-bottom:12px}
+.healing-big{font-size:40px;font-weight:900;letter-spacing:-2px;line-height:1}
+.healing-of{font-size:11px;color:var(--text2);margin-top:2px}
+.healing-bar-wrap{flex:1}
+.healing-tip{background:var(--bg);border-radius:8px;padding:12px;font-size:12px;color:var(--text2);line-height:1.55}
+.healing-tip-label{font-size:9px;font-weight:700;letter-spacing:1px;color:var(--text3);text-transform:uppercase;margin-bottom:5px}
+.tattoo-done-item{background:var(--white);padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;cursor:pointer}
+.tattoo-done-item:active{background:var(--bg)}
+.tattoo-done-av{width:42px;height:42px;background:var(--bg);border-radius:4px;border:1px solid var(--border);flex-shrink:0}
+.tattoo-done-body{flex:1}
+.tattoo-done-title{font-size:13px;font-weight:700}
+.tattoo-done-meta{font-size:10px;color:var(--text2);margin-top:2px}
+
+/* ── PERFIL CLIENTE ── */
+.profile-hero{padding:24px 16px;background:var(--white);border-bottom:1px solid var(--border)}
+.profile-av{width:64px;height:64px;border-radius:50%;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.profile-name{font-size:20px;font-weight:800;letter-spacing:-.5px;margin-bottom:2px}
+.profile-meta{font-size:11px;color:var(--text2)}
+.profile-stats{display:flex;margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.pstat{flex:1;text-align:center;border-right:1px solid var(--border)}
+.pstat:last-child{border-right:none}
+.pstat-n{font-size:18px;font-weight:800;letter-spacing:-.3px}
+.pstat-l{font-size:9px;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;margin-top:2px}
+.menu-item{display:flex;align-items:center;gap:12px;padding:15px 16px;border-bottom:1px solid var(--border);cursor:pointer;background:var(--white)}
+.menu-item:active{background:var(--bg)}
+.menu-icon-wrap{width:32px;height:32px;border-radius:8px;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.menu-body{flex:1}
+.menu-title{font-size:13px;font-weight:600}
+.menu-sub{font-size:10px;color:var(--text2);margin-top:1px}
+.menu-sec{font-size:9px;font-weight:700;letter-spacing:1.2px;color:var(--text3);text-transform:uppercase;padding:16px 16px 6px;background:var(--bg)}
+
+/* ── SECTION LABEL ── */
+.sec-label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);padding:16px 16px 8px;background:var(--bg)}
+.spacer{height:20px;background:var(--bg)}
+
+/* ── ESTUDIO DETALLE ── */
+.estudio-detail-banner{height:140px;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:center}
+.estudio-detail-info{background:var(--white);padding:16px;border-bottom:1px solid var(--border)}
+
+/* ── OVERLAY / SHEET ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:200;display:none;align-items:flex-end;justify-content:center}
+.overlay.on{display:flex}
+.sheet{background:var(--white);border-radius:20px 20px 0 0;padding:18px 18px 36px;width:100%;max-width:480px;animation:up .25s ease}
+@keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-handle{width:32px;height:3px;background:var(--border);border-radius:2px;margin:0 auto 18px}
+.sheet-title{font-size:15px;font-weight:800;margin-bottom:3px;letter-spacing:-.3px}
+.sheet-sub{font-size:11px;color:var(--text2);margin-bottom:20px}
+
+/* ── CHAT ── */
+.chat-wrap{display:none;position:fixed;inset:0;z-index:150;background:var(--white);flex-direction:column}
+.chat-wrap.on{display:flex}
+.chat-scroll{flex:1;overflow-y:auto;padding:12px 0;background:var(--bg)}
+.chat-msgs{display:flex;flex-direction:column;gap:8px;padding:0 12px}
+.msg{display:flex;gap:8px;align-items:flex-end}
+.msg.r{flex-direction:row-reverse}
+.msg-av{width:24px;height:24px;border-radius:50%;background:var(--border);border:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--text2)}
+.bubble{max-width:78%;background:var(--white);border:1px solid var(--border);border-radius:14px 14px 14px 4px;padding:10px 12px;font-size:13px;color:var(--text);line-height:1.45}
+.msg.r .bubble{background:var(--accent);color:#fff;border-color:var(--accent);border-radius:14px 14px 4px 14px}
+.bubble-time{font-size:9px;color:var(--text3);margin-top:3px}
+.msg-sys{text-align:center;font-size:10px;color:var(--text3);padding:4px 0;letter-spacing:.3px}
+.chat-bar{background:var(--white);border-top:1px solid var(--border);padding:10px 12px;padding-bottom:max(10px,env(safe-area-inset-bottom));display:flex;gap:8px;align-items:center}
+.chat-inp{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:100px;padding:10px 14px;color:var(--text);font-size:13px;outline:none;font-family:inherit}
+.chat-inp:focus{border-color:var(--border2)}
+.chat-send{background:var(--accent);border:none;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--accent);border-radius:100px;padding:9px 18px;font-size:12px;color:#fff;z-index:300;display:none;white-space:nowrap;max-width:88vw;font-weight:500}
+.toast.on{display:block;animation:fi .2s ease}
+@keyframes fi{from{opacity:0;transform:translateX(-50%) translateY(4px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* ── DIVIDER ── */
+.divider{height:1px;background:var(--border)}
+.bg-page{background:var(--bg)}
+</style>
+</head>
+<body>
+
+<!-- SVG DEFS (icons reutilizables) -->
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="ic-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/>
+  </symbol>
+  <symbol id="ic-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="4" width="18" height="18" rx="3"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+  </symbol>
+  <symbol id="ic-pen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
+  </symbol>
+  <symbol id="ic-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+  </symbol>
+  <symbol id="ic-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+  </symbol>
+  <symbol id="ic-heart-fill" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+  </symbol>
+  <symbol id="ic-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="15 18 9 12 15 6"/>
+  </symbol>
+  <symbol id="ic-share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+  </symbol>
+  <symbol id="ic-map" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
+  </symbol>
+  <symbol id="ic-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+  </symbol>
+  <symbol id="ic-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+  </symbol>
+  <symbol id="ic-attach" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/>
+  </symbol>
+  <symbol id="ic-send" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+  </symbol>
+  <symbol id="ic-star" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+  </symbol>
+  <symbol id="ic-bookmark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
+  </symbol>
+  <symbol id="ic-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/>
+  </symbol>
+  <symbol id="ic-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+  </symbol>
+  <symbol id="ic-switch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/>
+  </symbol>
+  <symbol id="ic-logout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+  </symbol>
+  <symbol id="ic-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="9 18 15 12 9 6"/>
+  </symbol>
+  <symbol id="ic-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
+  </symbol>
+</svg>
+
+<!-- TOPBAR -->
+<div class="topbar" id="topbar">
+  <div class="logo">Ci·Tattoo</div>
+  <button class="tb-action" onclick="openSheet('rol')">
+    <span>Vista</span>
+    <svg width="12" height="12"><use href="#ic-chevron" transform="rotate(90,6,6)"/></svg>
+  </button>
+</div>
+
+<!-- DISCOVER TABS -->
+<div class="dtabs" id="dtabs" style="display:none">
+  <div class="dtab on" id="dt-proyectos" onclick="showDTab('proyectos')">Proyectos</div>
+  <div class="dtab" id="dt-estudios" onclick="showDTab('estudios')">Estudios</div>
+  <div class="dtab" id="dt-profesionales" onclick="showDTab('profesionales')">Profesionales</div>
+  <div class="dtab" id="dt-ofertas" onclick="showDTab('ofertas')">Ofertas</div>
+</div>
+
+<!-- MAIN -->
+<div class="main" id="main">
+
+<!-- ══ LOGIN ══ -->
+<div class="screen on" id="s-login">
+  <div class="login-wrap">
+    <div class="login-logo">Ci·Tattoo</div>
+    <div class="login-sub">Gestión profesional del tatuaje</div>
+    <input class="input" type="email" placeholder="Email"/>
+    <input class="input" type="password" placeholder="Contraseña"/>
+    <button class="btn btn-solid" style="margin-bottom:10px" onclick="go('onboarding')">Entrar</button>
+    <div class="sep">o</div>
+    <button class="btn btn-outline" onclick="go('onboarding')">Continuar con Google</button>
+    <div style="margin-top:22px;font-size:12px;color:var(--text2)">¿No tienes cuenta? <span style="font-weight:700;color:var(--text);cursor:pointer;text-decoration:underline" onclick="go('onboarding')">Regístrate</span></div>
+  </div>
+</div>
+
+<!-- ══ ONBOARDING ══ -->
+<div class="screen" id="s-onboarding">
+  <div class="rol-wrap">
+    <div class="rol-title">¿Cómo usarás CiTattoo?</div>
+    <div class="rol-sub">Puedes cambiarlo después en tu perfil</div>
+    <div class="rol-card" onclick="setMode('c')">
+      <div class="rol-card-icon">
+        <svg width="18" height="18" color="var(--text2)"><use href="#ic-search"/></svg>
+      </div>
+      <div class="rol-card-title">Soy cliente</div>
+      <div class="rol-card-desc">Descubre artistas, gestiona tus citas y sigue la curación de tu tatuaje.</div>
+    </div>
+    <div class="rol-card" onclick="setMode('t')">
+      <div class="rol-card-icon">
+        <svg width="18" height="18" color="var(--text2)"><use href="#ic-pen"/></svg>
+      </div>
+      <div class="rol-card-title">Soy tatuador / estudio</div>
+      <div class="rol-card-desc">Gestiona tu agenda, proyectos y clientes. Publica tu trabajo.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DESCUBRIR ══ -->
+<div class="screen" id="s-descubrir">
+
+  <!-- Proyectos -->
+  <div id="dp-proyectos">
+    <div class="masonry">
+      <div class="sq-item" onclick="go('proyecto-detalle')">
+        <img src="assets/fotos/IMG-20260616-WA0048.jpg" style="width:100%;display:block">
+        <div class="sq-overlay"><span class="sq-artist">Carlos Vega</span><button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this.querySelector('svg'))"><svg width="15" height="15" color="#fff"><use href="#ic-heart"/></svg></button></div>
+      </div>
+      <div class="sq-item" onclick="go('proyecto-detalle')">
+        <img src="assets/fotos/IMG-20260616-WA0049.jpg" style="width:100%;display:block">
+        <div class="sq-overlay"><span class="sq-artist">María Solano</span><button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this.querySelector('svg'))"><svg width="15" height="15" color="#fff"><use href="#ic-heart"/></svg></button></div>
+      </div>
+      <div class="sq-item" onclick="go('proyecto-detalle')">
+        <img src="assets/fotos/IMG-20260616-WA0050.jpg" style="width:100%;display:block">
+        <div class="sq-overlay"><span class="sq-artist">Ana Torres</span><button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this.querySelector('svg'))"><svg width="15" height="15" color="#fff"><use href="#ic-heart"/></svg></button></div>
+      </div>
+      <div class="sq-item" onclick="go('proyecto-detalle')">
+        <img src="assets/fotos/IMG-20260616-WA0051.jpg" style="width:100%;display:block">
+        <div class="sq-overlay"><span class="sq-artist">Rafa Costa</span><button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this.querySelector('svg'))"><svg width="15" height="15" color="#fff"><use href="#ic-heart"/></svg></button></div>
+      </div>
+      <div class="sq-item" onclick="go('proyecto-detalle')">
+        <img src="assets/fotos/IMG-20260616-WA0052.jpg" style="width:100%;display:block">
+        <div class="sq-overlay"><span class="sq-artist">Laura M.</span><button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this.querySelector('svg'))"><svg width="15" height="15" color="#fff"><use href="#ic-heart"/></svg></button></div>
+      </div>
+      <div class="sq-item" onclick="go('proyecto-detalle')">
+        <img src="assets/fotos/IMG-20260616-WA0054.jpg" style="width:100%;display:block">
+        <div class="sq-overlay"><span class="sq-artist">Marcos R.</span><button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this.querySelector('svg'))"><svg width="15" height="15" color="#fff"><use href="#ic-heart"/></svg></button></div>
+      </div>
+      <div class="sq-item" onclick="go('proyecto-detalle')">
+        <img src="assets/fotos/IMG-20260616-WA0056.jpg" style="width:100%;display:block">
+        <div class="sq-overlay"><span class="sq-artist">Sergio V.</span><button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this.querySelector('svg'))"><svg width="15" height="15" color="#fff"><use href="#ic-heart"/></svg></button></div>
+      </div>
+      <div class="sq-item" onclick="go('proyecto-detalle')">
+        <img src="assets/fotos/IMG-20260616-WA0067.jpg" style="width:100%;display:block">
+        <div class="sq-overlay"><span class="sq-artist">Paula G.</span><button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this.querySelector('svg'))"><svg width="15" height="15" color="#fff"><use href="#ic-heart"/></svg></button></div>
+      </div>
+      <div class="sq-item" onclick="go('proyecto-detalle')">
+        <img src="assets/fotos/IMG-20260616-WA0072.jpg" style="width:100%;display:block">
+        <div class="sq-overlay"><span class="sq-artist">Luis G.</span><button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this.querySelector('svg'))"><svg width="15" height="15" color="#fff"><use href="#ic-heart"/></svg></button></div>
+      </div>
+      <div class="sq-item" onclick="go('proyecto-detalle')">
+        <img src="assets/fotos/IMG-20260616-WA0076.jpg" style="width:100%;display:block">
+        <div class="sq-overlay"><span class="sq-artist">Carlos Vega</span><button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this.querySelector('svg'))"><svg width="15" height="15" color="#fff"><use href="#ic-heart"/></svg></button></div>
+      </div>
+      <div class="sq-item" onclick="go('proyecto-detalle')">
+        <img src="assets/fotos/IMG-20260616-WA0077.jpg" style="width:100%;display:block">
+        <div class="sq-overlay"><span class="sq-artist">Nadia K.</span><button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this.querySelector('svg'))"><svg width="15" height="15" color="#fff"><use href="#ic-heart"/></svg></button></div>
+      </div>
+      <div class="sq-item" onclick="go('proyecto-detalle')">
+        <img src="assets/fotos/IMG-20260616-WA0083.jpg" style="width:100%;display:block">
+        <div class="sq-overlay"><span class="sq-artist">Álvaro S.</span><button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this.querySelector('svg'))"><svg width="15" height="15" color="#fff"><use href="#ic-heart"/></svg></button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estudios -->
+  <div id="dp-estudios" style="display:none">
+    <div class="estudio-list">
+
+      <div class="estudio-card" onclick="go('estudio-detalle')">
+        <div class="estudio-banner">
+          <div class="estudio-banner-placeholder" style="background:#ebebeb"></div>
+          <div class="estudio-rating-chip">
+            <svg width="11" height="11" color="#f5c518"><use href="#ic-star"/></svg>
+            <span>4.8 · 134 reseñas</span>
+          </div>
+          <button class="estudio-heart-btn" onclick="event.stopPropagation();toggleHeart(this)">
+            <svg width="15" height="15" color="var(--text)"><use href="#ic-heart"/></svg>
+          </button>
+          <div class="estudio-av-wrap">
+            <div class="estudio-av" style="background:#ddd"></div>
+          </div>
+        </div>
+        <div class="estudio-body">
+          <div class="estudio-name">BLACKLINE STUDIO</div>
+          <div class="estudio-loc-row">
+            <svg width="11" height="11" color="var(--text2)"><use href="#ic-pin"/></svg>
+            <span>Gran Vía 42, Madrid</span>
+          </div>
+          <div class="estudio-tags">JAPONÉS · REALISMO · BLACKWORK</div>
+        </div>
+      </div>
+
+      <div class="estudio-card" onclick="toast('Soul Tattoo · Barcelona')">
+        <div class="estudio-banner">
+          <div class="estudio-banner-placeholder" style="background:#e0e0e0"></div>
+          <div class="estudio-rating-chip">
+            <svg width="11" height="11" color="#f5c518"><use href="#ic-star"/></svg>
+            <span>5.0 · 89 reseñas</span>
+          </div>
+          <button class="estudio-heart-btn" onclick="event.stopPropagation();toggleHeart(this)">
+            <svg width="15" height="15" color="var(--text)"><use href="#ic-heart"/></svg>
+          </button>
+          <div class="estudio-av-wrap">
+            <div class="estudio-av" style="background:#ccc"></div>
+          </div>
+        </div>
+        <div class="estudio-body">
+          <div class="estudio-name">SOUL TATTOO</div>
+          <div class="estudio-loc-row">
+            <svg width="11" height="11" color="var(--text2)"><use href="#ic-pin"/></svg>
+            <span>Carrer de Mallorca 18, Barcelona</span>
+          </div>
+          <div class="estudio-tags">FINELINE · ACUARELA</div>
+        </div>
+      </div>
+
+      <div class="estudio-card" onclick="toast('Ink 34 · Valencia')">
+        <div class="estudio-banner">
+          <div class="estudio-banner-placeholder" style="background:#e8e8e8"></div>
+          <div class="estudio-rating-chip">
+            <svg width="11" height="11" color="#f5c518"><use href="#ic-star"/></svg>
+            <span>4.7 · 207 reseñas</span>
+          </div>
+          <button class="estudio-heart-btn" onclick="event.stopPropagation();toggleHeart(this)">
+            <svg width="15" height="15" color="var(--text)"><use href="#ic-heart"/></svg>
+          </button>
+          <div class="estudio-av-wrap">
+            <div class="estudio-av" style="background:#d5d5d5"></div>
+          </div>
+        </div>
+        <div class="estudio-body">
+          <div class="estudio-name">INK 34</div>
+          <div class="estudio-loc-row">
+            <svg width="11" height="11" color="var(--text2)"><use href="#ic-pin"/></svg>
+            <span>Calle Colón 34, Valencia</span>
+          </div>
+          <div class="estudio-tags">REALISMO · TRADICIONAL · NEO-TRAD</div>
+        </div>
+      </div>
+
+      <div class="estudio-card" onclick="toast('Dark Lines · Sevilla')">
+        <div class="estudio-banner">
+          <div class="estudio-banner-placeholder" style="background:#e4e4e4"></div>
+          <div class="estudio-rating-chip">
+            <svg width="11" height="11" color="#f5c518"><use href="#ic-star"/></svg>
+            <span>5.0 · 312 reseñas</span>
+          </div>
+          <button class="estudio-heart-btn" onclick="event.stopPropagation();toggleHeart(this)">
+            <svg width="15" height="15" color="var(--text)"><use href="#ic-heart"/></svg>
+          </button>
+          <div class="estudio-av-wrap">
+            <div class="estudio-av" style="background:#d0d0d0"></div>
+          </div>
+        </div>
+        <div class="estudio-body">
+          <div class="estudio-name">DARK LINES</div>
+          <div class="estudio-loc-row">
+            <svg width="11" height="11" color="var(--text2)"><use href="#ic-pin"/></svg>
+            <span>Calle Betis 7, Sevilla</span>
+          </div>
+          <div class="estudio-tags">BLACKWORK · GEOMÉTRICO</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Profesionales -->
+  <div id="dp-profesionales" style="display:none">
+    <div class="pro-list">
+      <div class="pro-item" onclick="go('pro-perfil')">
+        <div class="pro-av" style="background:#e0e0e0"></div>
+        <div class="pro-info">
+          <div class="pro-name">Carlos Vega</div>
+          <div class="pro-city">Madrid · 2.1 km</div>
+          <div class="pro-styles">JAPONÉS · REALISMO</div>
+        </div>
+        <button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this)"><svg width="18" height="18" color="var(--text3)"><use href="#ic-heart"/></svg></button>
+      </div>
+      <div class="pro-item" onclick="toast('María Solano · Fineline · Barcelona')">
+        <div class="pro-av" style="background:#d8d8d8"></div>
+        <div class="pro-info">
+          <div class="pro-name">María Solano</div>
+          <div class="pro-city">Barcelona · 5.2 km</div>
+          <div class="pro-styles">FINELINE · ACUARELA</div>
+        </div>
+        <button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this)"><svg width="18" height="18" color="var(--text3)"><use href="#ic-heart"/></svg></button>
+      </div>
+      <div class="pro-item" onclick="toast('Rafa Costa · Realismo · Valencia')">
+        <div class="pro-av" style="background:#d0d0d0"></div>
+        <div class="pro-info">
+          <div class="pro-name">Rafa Costa</div>
+          <div class="pro-city">Valencia · 3.4 km</div>
+          <div class="pro-styles">REALISMO · BLACKWORK</div>
+        </div>
+        <button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this)"><svg width="18" height="18" color="var(--text3)"><use href="#ic-heart"/></svg></button>
+      </div>
+      <div class="pro-item" onclick="toast('Ana Torres · Japonés · Madrid')">
+        <div class="pro-av" style="background:#e8e8e8"></div>
+        <div class="pro-info">
+          <div class="pro-name">Ana Torres</div>
+          <div class="pro-city">Madrid · 1.2 km</div>
+          <div class="pro-styles">JAPONÉS · TRADICIONAL</div>
+        </div>
+        <button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this)"><svg width="18" height="18" color="var(--text3)"><use href="#ic-heart"/></svg></button>
+      </div>
+      <div class="pro-item" onclick="toast('Laura M. · Fineline · Madrid')">
+        <div class="pro-av" style="background:#ddd"></div>
+        <div class="pro-info">
+          <div class="pro-name">Laura M.</div>
+          <div class="pro-city">Madrid · 2.7 km</div>
+          <div class="pro-styles">FINELINE</div>
+        </div>
+        <button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this)"><svg width="18" height="18" color="var(--text3)"><use href="#ic-heart"/></svg></button>
+      </div>
+      <div class="pro-item" onclick="toast('Marcos R. · Blackwork · Sevilla')">
+        <div class="pro-av" style="background:#d5d5d5"></div>
+        <div class="pro-info">
+          <div class="pro-name">Marcos R.</div>
+          <div class="pro-city">Sevilla · 4.1 km</div>
+          <div class="pro-styles">BLACKWORK · GEOMÉTRICO</div>
+        </div>
+        <button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this)"><svg width="18" height="18" color="var(--text3)"><use href="#ic-heart"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ofertas -->
+  <div id="dp-ofertas" style="display:none">
+    <div class="oferta-list">
+      <div class="oferta-item" onclick="go('pro-perfil')">
+        <div class="oferta-tag">Hasta el 30 Jun</div>
+        <div class="oferta-top">
+          <div>
+            <div class="oferta-name">Flash de verano</div>
+            <div class="oferta-meta">Carlos Vega · Blackline Studio · Madrid</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;margin-left:12px">
+            <div class="oferta-price-old">120€</div>
+            <div class="oferta-price">70€</div>
+          </div>
+        </div>
+        <div class="oferta-bottom">
+          <span class="chip">−42%</span><span class="chip">~2h</span><span class="chip">Sesión única</span>
+        </div>
+      </div>
+      <div class="oferta-item" onclick="toast('Fineline mini · María Solano')">
+        <div class="oferta-tag">Esta semana</div>
+        <div class="oferta-top">
+          <div>
+            <div class="oferta-name">Fineline mini</div>
+            <div class="oferta-meta">María Solano · Soul Tattoo · Barcelona</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;margin-left:12px">
+            <div class="oferta-price-old">80€</div>
+            <div class="oferta-price">50€</div>
+          </div>
+        </div>
+        <div class="oferta-bottom">
+          <span class="chip">−38%</span><span class="chip">~1h</span><span class="chip">Hasta 5cm</span>
+        </div>
+      </div>
+      <div class="oferta-item" onclick="toast('Blackwork express · Marcos R.')">
+        <div class="oferta-tag">Quedan 3 plazas</div>
+        <div class="oferta-top">
+          <div>
+            <div class="oferta-name">Blackwork express</div>
+            <div class="oferta-meta">Marcos R. · Dark Lines · Sevilla</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;margin-left:12px">
+            <div class="oferta-price">90€</div>
+          </div>
+        </div>
+        <div class="oferta-bottom">
+          <span class="chip">~2.5h</span><span class="chip">Este finde</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /descubrir -->
+
+<!-- ══ PROYECTO DETALLE ══ -->
+<div class="screen" id="s-proyecto-detalle">
+  <div class="pd-photo" style="background:#d0d0d0;display:block;padding:0">
+    <img src="assets/fotos/IMG-20260616-WA0048.jpg" style="width:100%;display:block">
+    <button class="pd-save-btn" style="position:absolute;top:10px;right:10px" onclick="toggleHeart(this.querySelector('svg'))">
+      <svg width="18" height="18" color="var(--text)"><use href="#ic-heart"/></svg>
+    </button>
+  </div>
+  <div class="pd-toggle-bar">
+    <div class="pd-tab on" id="pdt-artista" onclick="pdTab('artista')">Carlos Vega</div>
+    <div class="pd-tab" id="pdt-estudio" onclick="pdTab('estudio')">Blackline Studio</div>
+  </div>
+  <div class="pd-info" id="pdi-artista">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <div style="width:44px;height:44px;border-radius:50%;background:var(--bg);border:1px solid var(--border);flex-shrink:0"></div>
+      <div>
+        <div style="font-size:15px;font-weight:800;letter-spacing:-.3px">Carlos Vega</div>
+        <div style="font-size:11px;color:var(--text2);margin-top:2px">4.9 · 87 trabajos · Madrid</div>
+        <div style="font-size:10px;color:var(--text3);letter-spacing:.3px;margin-top:2px">JAPONÉS · REALISMO · BLACKWORK</div>
+      </div>
+    </div>
+    <button class="btn btn-solid" onclick="go('pro-perfil')">Ver perfil completo</button>
+  </div>
+  <div class="pd-info" id="pdi-estudio" style="display:none">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <div style="width:44px;height:44px;border-radius:50%;background:var(--bg);border:1px solid var(--border);flex-shrink:0"></div>
+      <div>
+        <div style="font-size:15px;font-weight:800;letter-spacing:-.3px">Blackline Studio</div>
+        <div style="font-size:11px;color:var(--text2);margin-top:2px">Gran Vía 42, Madrid · 3 tatuadores</div>
+        <div style="font-size:10px;color:var(--text3);letter-spacing:.3px;margin-top:2px">4.8 · Abierto ahora</div>
+      </div>
+    </div>
+    <button class="btn btn-solid" onclick="go('estudio-detalle')">Ver estudio</button>
+  </div>
+</div>
+
+<!-- ══ ESTUDIO DETALLE ══ -->
+<div class="screen" id="s-estudio-detalle">
+  <div class="estudio-detail-banner" style="background:#e0e0e0"></div>
+  <div class="estudio-detail-info">
+    <div style="font-size:18px;font-weight:800;letter-spacing:-.3px;margin-bottom:4px">Blackline Studio</div>
+    <div style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2);margin-bottom:4px">
+      <svg width="11" height="11" color="var(--text2)"><use href="#ic-pin"/></svg>
+      Gran Vía 42, Madrid · 2.1 km
+    </div>
+    <div style="font-size:11px;color:var(--text2)">4.8 · Abierto · 10:00–20:00</div>
+  </div>
+  <div class="sec-label">Tatuadores</div>
+  <div class="pro-list">
+    <div class="pro-item" onclick="go('pro-perfil')">
+      <div class="pro-av" style="background:#ddd"></div>
+      <div class="pro-info"><div class="pro-name">Carlos Vega</div><div class="pro-city">Admin · Japonés · Realismo</div></div>
+      <span style="font-size:10px;color:var(--text2);border:1px solid var(--border);border-radius:100px;padding:3px 10px;font-weight:600">Activo</span>
+    </div>
+    <div class="pro-item" onclick="toast('María Solano · Fineline')">
+      <div class="pro-av" style="background:#d5d5d5"></div>
+      <div class="pro-info"><div class="pro-name">María Solano</div><div class="pro-city">Tatuadora · Fineline</div></div>
+      <span style="font-size:10px;color:var(--text2);border:1px solid var(--border);border-radius:100px;padding:3px 10px;font-weight:600">Activa</span>
+    </div>
+    <div class="pro-item" onclick="toast('Rafa Costa · Guest hasta 20 Jun')" style="opacity:.5">
+      <div class="pro-av" style="background:#ccc"></div>
+      <div class="pro-info"><div class="pro-name">Rafa Costa</div><div class="pro-city">Guest · hasta 20 Jun · Blackwork</div></div>
+      <span style="font-size:10px;color:var(--text3);border:1px solid var(--border);border-radius:100px;padding:3px 10px;font-weight:600">Guest</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PERFIL PROFESIONAL ══ -->
+<div class="screen" id="s-pro-perfil">
+  <div class="pp-hero">
+    <div class="pp-av"></div>
+    <div class="pp-name">Carlos Vega</div>
+    <div class="pp-meta">Blackline Studio · Gran Vía 42, Madrid</div>
+    <div class="pp-rating">4.9 · 87 trabajos · 2.1 km</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+      <span class="chip">Japonés</span><span class="chip">Realismo</span><span class="chip">Blackwork</span>
+    </div>
+    <div class="pp-actions">
+      <button class="btn btn-solid" style="flex:1;padding:12px" onclick="openChat()">Contactar</button>
+      <button class="btn btn-outline" style="width:44px;padding:12px;flex-shrink:0" onclick="toast('Perfil compartido')">
+        <svg width="16" height="16" color="var(--text2)"><use href="#ic-share"/></svg>
+      </button>
+      <button class="btn btn-outline" style="width:44px;padding:12px;flex-shrink:0" onclick="toast('Gran Vía 42, Madrid')">
+        <svg width="16" height="16" color="var(--text2)"><use href="#ic-map"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="pp-subtabs">
+    <div class="pp-stab on" id="pps-servicios" onclick="ppTab('servicios')">Servicios</div>
+    <div class="pp-stab" id="pps-ofertas" onclick="ppTab('ofertas')">Ofertas</div>
+    <div class="pp-stab" id="pps-trabajos" onclick="ppTab('trabajos')">Trabajos</div>
+  </div>
+
+  <div class="pp-panel on" id="ppc-servicios">
+    <div class="svc-list">
+      <div class="svc-item">
+        <div class="svc-top"><div class="svc-name">Flash del día</div><div class="svc-price">80€</div></div>
+        <div class="svc-desc">Diseños disponibles hoy, sesión única. Precio cerrado.</div>
+        <div style="display:flex;gap:6px"><span class="chip">~2h</span><span class="chip">Disponible hoy</span></div>
+      </div>
+      <div class="svc-item">
+        <div class="svc-top"><div class="svc-name">Sesión única</div><div class="svc-price">Desde 120€</div></div>
+        <div class="svc-desc">Tu diseño en una sola sesión.</div>
+        <div style="display:flex;gap:6px"><span class="chip">1–3h</span></div>
+      </div>
+      <div class="svc-item" style="border-bottom:none">
+        <div class="svc-top"><div class="svc-name">Proyecto personalizado</div><div style="font-size:13px;font-weight:700;color:var(--text2)">A consultar</div></div>
+        <div class="svc-desc">Diseño exclusivo en múltiples sesiones.</div>
+        <div style="display:flex;gap:6px"><span class="chip">Multi-sesión</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pp-panel" id="ppc-ofertas">
+    <div class="oferta-list">
+      <div class="oferta-item">
+        <div class="oferta-tag">Hasta el 30 Jun</div>
+        <div class="oferta-top">
+          <div><div class="oferta-name">Flash de verano</div></div>
+          <div style="text-align:right"><div class="oferta-price-old">120€</div><div class="oferta-price">70€</div></div>
+        </div>
+        <div class="oferta-bottom"><span class="chip">−42%</span><span class="chip">~2h</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pp-panel" id="ppc-trabajos">
+    <div class="trabajos-grid">
+      <div class="trabajo-item" onclick="go('proyecto-detalle')"><img src="assets/fotos/IMG-20260616-WA0086.jpg" style="width:100%;height:100%;object-fit:cover"></div>
+      <div class="trabajo-item" onclick="go('proyecto-detalle')"><img src="assets/fotos/IMG-20260616-WA0087.jpg" style="width:100%;height:100%;object-fit:cover"></div>
+      <div class="trabajo-item" onclick="go('proyecto-detalle')"><img src="assets/fotos/IMG-20260616-WA0089.jpg" style="width:100%;height:100%;object-fit:cover"></div>
+      <div class="trabajo-item" onclick="go('proyecto-detalle')"><img src="assets/fotos/IMG-20260616-WA0092.jpg" style="width:100%;height:100%;object-fit:cover"></div>
+      <div class="trabajo-item" onclick="go('proyecto-detalle')"><img src="assets/fotos/IMG-20260616-WA0093.jpg" style="width:100%;height:100%;object-fit:cover"></div>
+      <div class="trabajo-item" onclick="go('proyecto-detalle')"><img src="assets/fotos/IMG-20260616-WA0097.jpg" style="width:100%;height:100%;object-fit:cover"></div>
+      <div class="trabajo-item" onclick="go('proyecto-detalle')"><img src="assets/fotos/IMG-20260616-WA0098.jpg" style="width:100%;height:100%;object-fit:cover"></div>
+      <div class="trabajo-item" onclick="go('proyecto-detalle')"><img src="assets/fotos/IMG-20260616-WA0099.jpg" style="width:100%;height:100%;object-fit:cover"></div>
+      <div class="trabajo-item" onclick="go('proyecto-detalle')"><img src="assets/fotos/IMG-20260616-WA0101.jpg" style="width:100%;height:100%;object-fit:cover"></div>
+    </div>
+    <div class="spacer"></div>
+  </div>
+</div>
+
+<!-- ══ CITAS ══ -->
+<div class="screen" id="s-citas">
+  <div class="page-header">
+    <div class="page-title">Mis citas</div>
+    <div class="page-sub">Hola, Ana</div>
+  </div>
+  <div class="sec-label">Próximas</div>
+
+  <div class="cita-card">
+    <div class="cita-artist-row">
+      <div class="cita-av"></div>
+      <div class="cita-name-col">
+        <div class="cita-artist">Carlos Vega</div>
+        <div class="cita-studio">Blackline Studio</div>
+      </div>
+      <span class="status-pill status-today">Hoy</span>
+    </div>
+    <div class="cita-title">Manga japonesa — Sesión 2/4</div>
+    <div class="cita-when">Miércoles 11 Jun · 10:00 · ~4h</div>
+    <div class="info-box">Gran Vía 42, Madrid · <span style="text-decoration:underline;cursor:pointer" onclick="toast('Abriendo Maps...')">Ver mapa</span></div>
+    <div style="font-size:11px;color:var(--text2);margin:8px 0 4px">Ven con la zona hidratada · Sin alcohol 24h antes</div>
+    <div class="pbar" style="margin-bottom:4px"><div class="pfill" style="width:50%"></div></div>
+    <div class="pbar-label">Sesión 2 de 4 · 50% completado</div>
+    <div class="cita-actions">
+      <button class="cita-btn" onclick="openChat()">
+        <svg width="13" height="13" color="var(--text2)"><use href="#ic-chat"/></svg> Chat
+      </button>
+      <button class="cita-btn" onclick="toast('Gran Vía 42, Madrid')">
+        <svg width="13" height="13" color="var(--text2)"><use href="#ic-map"/></svg> Mapa
+      </button>
+      <button class="cita-btn" onclick="toast('Consentimiento firmado ✓')">
+        <svg width="13" height="13" color="var(--text2)"><use href="#ic-doc"/></svg> Doc
+      </button>
+    </div>
+  </div>
+
+  <div class="cita-card" style="opacity:.65">
+    <div class="cita-artist-row">
+      <div class="cita-av"></div>
+      <div class="cita-name-col">
+        <div class="cita-artist">Carlos Vega</div>
+        <div class="cita-studio">Blackline Studio</div>
+      </div>
+      <span class="status-pill">En 14 días</span>
+    </div>
+    <div class="cita-title">Manga japonesa — Sesión 3/4</div>
+    <div class="cita-when">Miércoles 25 Jun · 10:00 · ~4h</div>
+    <div class="pbar"><div class="pfill" style="width:50%"></div></div>
+    <div class="pbar-label">50% del proyecto completado</div>
+  </div>
+
+  <div class="sec-label">Pasadas</div>
+  <div class="cita-card" style="opacity:.4">
+    <div class="cita-artist-row">
+      <div class="cita-av"></div>
+      <div class="cita-name-col">
+        <div class="cita-artist">Carlos Vega</div>
+        <div class="cita-studio">Blackline Studio</div>
+      </div>
+      <span class="status-pill">Completada</span>
+    </div>
+    <div class="cita-title">Manga japonesa — Sesión 1/4</div>
+    <div class="cita-when">28 May · 5h</div>
+  </div>
+  <div class="spacer"></div>
+</div>
+
+<!-- ══ TATTOOS ══ -->
+<div class="screen" id="s-tattoos">
+  <div class="page-header">
+    <div class="page-title">Mis tatuajes</div>
+  </div>
+  <div class="sec-label">En curación</div>
+  <div class="healing-card">
+    <div class="healing-title">Manga japonesa</div>
+    <div class="healing-meta">Sesión 1 · Carlos Vega · Blackline Studio</div>
+    <div class="healing-day-row">
+      <div>
+        <div class="healing-big">4</div>
+        <div class="healing-of">de 14 días</div>
+      </div>
+      <div class="healing-bar-wrap">
+        <div class="pbar" style="height:2px"><div class="pfill" style="width:28%"></div></div>
+        <div class="pbar-label" style="margin-top:5px">28% de curación exterior</div>
+      </div>
+    </div>
+    <div class="healing-tip">
+      <div class="healing-tip-label">Hoy — Día 4</div>
+      Aplica una capa fina de Bepanthen o Aquaphor 2 veces al día. La piel puede picar — no te rasques.
+    </div>
+  </div>
+
+  <div class="sec-label">Completados</div>
+  <div class="pro-list">
+    <div class="tattoo-done-item" onclick="toast('Flor de cerezo · Feb 2024')">
+      <div class="tattoo-done-av"></div>
+      <div class="tattoo-done-body">
+        <div class="tattoo-done-title">Flor de cerezo</div>
+        <div class="tattoo-done-meta">María Solano · Soul Tattoo · Feb 2024</div>
+      </div>
+      <svg width="14" height="14" color="var(--text3)"><use href="#ic-chevron"/></svg>
+    </div>
+    <div class="tattoo-done-item" onclick="toast('Geométrico brazo · Nov 2023')">
+      <div class="tattoo-done-av"></div>
+      <div class="tattoo-done-body">
+        <div class="tattoo-done-title">Geométrico brazo</div>
+        <div class="tattoo-done-meta">Marcos R. · Dark Lines · Nov 2023</div>
+      </div>
+      <svg width="14" height="14" color="var(--text3)"><use href="#ic-chevron"/></svg>
+    </div>
+  </div>
+  <div class="spacer"></div>
+</div>
+
+<!-- ══ PERFIL ══ -->
+<div class="screen" id="s-perfil">
+  <div class="profile-hero">
+    <div class="profile-av"></div>
+    <div class="profile-name">Ana Ruiz</div>
+    <div class="profile-meta">Madrid · Miembro desde 2023</div>
+    <div class="profile-stats">
+      <div class="pstat"><div class="pstat-n">3</div><div class="pstat-l">Tatuajes</div></div>
+      <div class="pstat"><div class="pstat-n">2</div><div class="pstat-l">Artistas</div></div>
+      <div class="pstat"><div class="pstat-n">4</div><div class="pstat-l">Guardados</div></div>
+    </div>
+  </div>
+  <div class="menu-sec">Cuenta</div>
+  <div style="background:var(--white)">
+    <div class="menu-item" onclick="toast('Mis guardados')">
+      <div class="menu-icon-wrap"><svg width="16" height="16" color="var(--text2)"><use href="#ic-bookmark"/></svg></div>
+      <div class="menu-body"><div class="menu-title">Guardados</div><div class="menu-sub">4 artistas y trabajos guardados</div></div>
+      <svg width="14" height="14" color="var(--text3)"><use href="#ic-chevron"/></svg>
+    </div>
+    <div class="menu-item" onclick="toast('Mis documentos')">
+      <div class="menu-icon-wrap"><svg width="16" height="16" color="var(--text2)"><use href="#ic-doc"/></svg></div>
+      <div class="menu-body"><div class="menu-title">Mis documentos</div><div class="menu-sub">3 consentimientos firmados</div></div>
+      <svg width="14" height="14" color="var(--text3)"><use href="#ic-chevron"/></svg>
+    </div>
+    <div class="menu-item" onclick="toast('Notificaciones')">
+      <div class="menu-icon-wrap"><svg width="16" height="16" color="var(--text2)"><use href="#ic-bell"/></svg></div>
+      <div class="menu-body"><div class="menu-title">Notificaciones</div><div class="menu-sub">Push y email activados</div></div>
+      <svg width="14" height="14" color="var(--text3)"><use href="#ic-chevron"/></svg>
+    </div>
+    <div class="menu-item" onclick="toast('Editar perfil')">
+      <div class="menu-icon-wrap"><svg width="16" height="16" color="var(--text2)"><use href="#ic-edit"/></svg></div>
+      <div class="menu-body"><div class="menu-title">Editar perfil</div><div class="menu-sub">Nombre, foto, email</div></div>
+      <svg width="14" height="14" color="var(--text3)"><use href="#ic-chevron"/></svg>
+    </div>
+  </div>
+  <div class="menu-sec">Más</div>
+  <div style="background:var(--white)">
+    <div class="menu-item" onclick="openSheet('rol')">
+      <div class="menu-icon-wrap"><svg width="16" height="16" color="var(--text2)"><use href="#ic-switch"/></svg></div>
+      <div class="menu-body"><div class="menu-title">Cambiar a vista tatuador</div></div>
+      <svg width="14" height="14" color="var(--text3)"><use href="#ic-chevron"/></svg>
+    </div>
+    <div class="menu-item" onclick="toast('Sesión cerrada')">
+      <div class="menu-icon-wrap"><svg width="16" height="16" color="var(--red)"><use href="#ic-logout"/></svg></div>
+      <div class="menu-body"><div class="menu-title" style="color:var(--red)">Cerrar sesión</div></div>
+    </div>
+  </div>
+  <div class="spacer"></div>
+</div>
+
+</div><!-- /main -->
+
+<!-- BOTTOM NAV -->
+<div class="bnav" id="bnav" style="display:none">
+  <div class="nt on" id="nt-descubrir" onclick="switchTab('descubrir')">
+    <svg width="22" height="22" color="var(--text)"><use href="#ic-search"/></svg>
+    <span class="nt-l">Descubrir</span>
+  </div>
+  <div class="nt" id="nt-citas" onclick="switchTab('citas')">
+    <svg width="22" height="22" color="var(--text)"><use href="#ic-calendar"/></svg>
+    <span class="nt-l">Citas</span>
+  </div>
+  <div class="nt" id="nt-tattoos" onclick="switchTab('tattoos')">
+    <svg width="22" height="22" color="var(--text)"><use href="#ic-pen"/></svg>
+    <span class="nt-l">Tattoos</span>
+  </div>
+  <div class="nt" id="nt-perfil" onclick="switchTab('perfil')">
+    <svg width="22" height="22" color="var(--text)"><use href="#ic-user"/></svg>
+    <span class="nt-l">Perfil</span>
+  </div>
+</div>
+
+<!-- SHEET ROL -->
+<div class="overlay" id="sheet-rol">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Cambiar vista</div>
+    <div class="sheet-sub">Elige cómo quieres entrar</div>
+    <button class="btn btn-solid" style="margin-bottom:10px" onclick="setMode('c');closeSheet('rol')">Vista Cliente</button>
+    <button class="btn btn-outline" style="margin-bottom:10px" onclick="closeSheet('rol');toast('Vista tatuador — próximamente')">Vista Tatuador</button>
+    <button class="btn btn-outline" onclick="closeSheet('rol')">Cancelar</button>
+  </div>
+</div>
+
+<!-- CHAT -->
+<div class="chat-wrap" id="chat-wrap">
+  <div class="topbar">
+    <button class="tb-back" onclick="closeChat()">
+      <svg width="22" height="22" color="var(--text)"><use href="#ic-back"/></svg>
+    </button>
+    <div style="display:flex;align-items:center;gap:8px;flex:1">
+      <div style="width:30px;height:30px;border-radius:50%;background:var(--bg);border:1px solid var(--border)"></div>
+      <div>
+        <div style="font-size:13px;font-weight:700">Carlos Vega</div>
+        <div style="font-size:10px;color:var(--text2)">En línea</div>
+      </div>
+    </div>
+    <button class="icon-btn" onclick="toast('Adjuntar archivo')">
+      <svg width="20" height="20" color="var(--text2)"><use href="#ic-attach"/></svg>
+    </button>
+  </div>
+  <div class="chat-scroll">
+    <div class="chat-msgs" id="chat-msgs">
+      <div class="msg-sys">Inicio de la conversación</div>
+      <div class="msg">
+        <div class="msg-av">C</div>
+        <div><div class="bubble">¡Hola! ¿En qué puedo ayudarte?</div><div class="bubble-time">10:24</div></div>
+      </div>
+      <div class="msg r">
+        <div class="msg-av">A</div>
+        <div><div class="bubble">Hola, quería preguntarte por un proyecto japonés en el brazo</div><div class="bubble-time" style="text-align:right">10:31</div></div>
+      </div>
+      <div class="msg">
+        <div class="msg-av">C</div>
+        <div><div class="bubble">¡Perfecto! ¿Tienes alguna referencia? Puedes mandarme fotos directamente aquí.</div><div class="bubble-time">10:33</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="chat-bar">
+    <button class="icon-btn" onclick="toast('Adjuntar')">
+      <svg width="20" height="20" color="var(--text2)"><use href="#ic-attach"/></svg>
+    </button>
+    <input class="chat-inp" id="chat-inp" placeholder="Escribe un mensaje..." onkeydown="if(event.key==='Enter')sendMsg()"/>
+    <button class="chat-send" onclick="sendMsg()">
+      <svg width="16" height="16" color="#fff"><use href="#ic-send"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+let toastT;
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('on');
+  clearTimeout(toastT);
+  toastT=setTimeout(()=>t.classList.remove('on'),2500);
+}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+  const el=document.getElementById('s-'+id);
+  if(el)el.classList.add('on');
+  document.getElementById('main').scrollTop=0;
+}
+
+const SUB={
+  'proyecto-detalle':{title:'',back:'descubrir'},
+  'estudio-detalle':{title:'Blackline Studio',back:'descubrir'},
+  'pro-perfil':{title:'Carlos Vega',back:'descubrir'},
+};
+
+function go(id){
+  const cfg=SUB[id];
+  const topbar=document.getElementById('topbar');
+  document.getElementById('dtabs').style.display='none';
+  if(cfg){
+    topbar.innerHTML=`<button class="tb-back" onclick="go('${cfg.back}')"><svg width="22" height="22" color="var(--text)"><use href="#ic-back"/></svg></button><span class="tb-title">${cfg.title}</span>`;
+  } else {
+    resetTopbar();
+  }
+  showScreen(id);
+}
+
+function resetTopbar(){
+  document.getElementById('topbar').innerHTML=`<div class="logo">Ci·Tattoo</div><button class="tb-action" onclick="openSheet('rol')"><span>Vista</span><svg width="12" height="12"><use href="#ic-chevron" transform="rotate(90,6,6)"/></svg></button>`;
+}
+
+function switchTab(tab){
+  resetTopbar();
+  document.getElementById('dtabs').style.display=tab==='descubrir'?'flex':'none';
+  document.querySelectorAll('.nt').forEach(n=>n.classList.remove('on'));
+  const el=document.getElementById('nt-'+tab);if(el)el.classList.add('on');
+  showScreen(tab);
+}
+
+function setMode(mode){
+  document.getElementById('bnav').style.display=mode==='c'?'flex':'none';
+  if(mode==='c')switchTab('descubrir');
+}
+
+function showDTab(tab){
+  ['proyectos','estudios','profesionales','ofertas'].forEach(t=>{
+    document.getElementById('dp-'+t).style.display=t===tab?'block':'none';
+    document.getElementById('dt-'+t).classList.toggle('on',t===tab);
+  });
+}
+
+function ppTab(tab){
+  ['servicios','ofertas','trabajos'].forEach(t=>{
+    document.getElementById('ppc-'+t).classList.toggle('on',t===tab);
+    document.getElementById('pps-'+t).classList.toggle('on',t===tab);
+  });
+}
+
+function pdTab(tab){
+  document.getElementById('pdt-artista').classList.toggle('on',tab==='artista');
+  document.getElementById('pdt-estudio').classList.toggle('on',tab==='estudio');
+  document.getElementById('pdi-artista').style.display=tab==='artista'?'block':'none';
+  document.getElementById('pdi-estudio').style.display=tab==='estudio'?'block':'none';
+}
+
+function toggleHeart(el){
+  const btn=el.closest?el.closest('.heart-btn,.estudio-heart-btn,.pd-save-btn'):{classList:{contains:()=>false,add:()=>{},remove:()=>{}}};
+  if(el.tagName==='svg'||el.tagName==='SVG'){
+    const use=el.querySelector('use');
+    if(!use)return;
+    const saved=use.getAttribute('href')==='#ic-heart-fill';
+    use.setAttribute('href',saved?'#ic-heart':'#ic-heart-fill');
+    el.style.color=saved?'var(--text3)':'var(--red)';
+    toast(saved?'Eliminado de guardados':'Guardado');
+  }
+}
+
+function openSheet(id){document.getElementById('sheet-'+id).classList.add('on');}
+function closeSheet(id){document.getElementById('sheet-'+id).classList.remove('on');}
+document.querySelectorAll('.overlay').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('on');});
+});
+
+function openChat(){document.getElementById('chat-wrap').classList.add('on');}
+function closeChat(){document.getElementById('chat-wrap').classList.remove('on');}
+function sendMsg(){
+  const inp=document.getElementById('chat-inp');
+  const txt=inp.value.trim();if(!txt)return;
+  const msgs=document.getElementById('chat-msgs');
+  const d=document.createElement('div');d.className='msg r';
+  d.innerHTML=`<div class="msg-av">A</div><div><div class="bubble">${txt}</div><div class="bubble-time" style="text-align:right">Ahora</div></div>`;
+  msgs.appendChild(d);inp.value='';
+  document.querySelector('.chat-scroll').scrollTop=99999;
+}
+</script>
+</body>
+</html>
