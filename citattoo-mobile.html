@@ -445,10 +445,15 @@ body{background:#f5f5f5;display:flex;align-items:center;justify-content:center;h
 <!-- TOPBAR -->
 <div class="topbar" id="topbar">
   <div class="logo">Ci·Tattoo</div>
-  <button class="tb-action" onclick="openSheet('rol')">
-    <span>Vista</span>
-    <svg width="12" height="12"><use href="#ic-chevron" transform="rotate(90,6,6)"/></svg>
-  </button>
+  <div style="display:flex;align-items:center;gap:4px;margin-left:auto">
+    <button class="tb-action" onclick="openSheet('rol')">
+      <span>Vista</span>
+      <svg width="12" height="12"><use href="#ic-chevron" transform="rotate(90,6,6)"/></svg>
+    </button>
+    <button class="tb-action" style="padding:6px 8px" onclick="switchTab('perfil')" id="tb-perfil-btn">
+      <svg width="20" height="20" color="var(--text2)"><use href="#ic-user"/></svg>
+    </button>
+  </div>
 </div>
 
 <!-- DISCOVER TABS -->
@@ -889,6 +894,95 @@ body{background:#f5f5f5;display:flex;align-items:center;justify-content:center;h
   </div>
 </div>
 
+<!-- ══ FAVORITOS ══ -->
+<div class="screen" id="s-favoritos">
+  <div class="dtabs" id="fav-tabs">
+    <div class="dtab on" id="fdt-profesionales" onclick="showFavTab('profesionales')">Profesionales</div>
+    <div class="dtab" id="fdt-estudios" onclick="showFavTab('estudios')">Estudios</div>
+    <div class="dtab" id="fdt-proyectos" onclick="showFavTab('proyectos')">Proyectos</div>
+  </div>
+
+  <!-- Profesionales guardados -->
+  <div id="fdp-profesionales">
+    <div class="pro-cards">
+      <div class="pro-card" onclick="openPro('carlos-vega')">
+        <img class="pro-card-banner-img" src="assets/fotos/banners-tatuadores/carlos-vega.avif" alt="">
+        <div class="pro-card-scrim"></div>
+        <div class="pro-card-inner">
+          <div class="pro-card-av"><img src="assets/fotos/perfil-tatuadores/carlos-vega.jpg" alt=""></div>
+          <div class="pro-card-info">
+            <div class="pro-card-rating"><svg width="11" height="11" color="#f5c518"><use href="#ic-star"/></svg> 4.9 · 87 trabajos</div>
+            <div class="pro-card-name">Carlos Vega</div>
+            <div class="pro-card-loc">Madrid · 2.1 km</div>
+            <div class="pro-card-styles">JAPONÉS · REALISMO · BLACKWORK</div>
+          </div>
+        </div>
+      </div>
+      <div class="pro-card" onclick="openPro('maria-solano')">
+        <img class="pro-card-banner-img" src="assets/fotos/banners-tatuadores/maria-solano.avif" alt="">
+        <div class="pro-card-scrim"></div>
+        <div class="pro-card-inner">
+          <div class="pro-card-av"><img src="assets/fotos/perfil-tatuadores/maria-solano.jpg" alt=""></div>
+          <div class="pro-card-info">
+            <div class="pro-card-rating"><svg width="11" height="11" color="#f5c518"><use href="#ic-star"/></svg> 5.0 · 63 trabajos</div>
+            <div class="pro-card-name">María Solano</div>
+            <div class="pro-card-loc">Barcelona · 5.2 km</div>
+            <div class="pro-card-styles">FINELINE · ACUARELA</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estudios guardados -->
+  <div id="fdp-estudios" style="display:none">
+    <div class="estudio-list">
+      <div class="estudio-card" onclick="go('estudio-detalle')">
+        <div class="estudio-banner">
+          <img src="assets/fotos/banners-estudios/blackline-studio.jpeg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+          <div class="estudio-rating-chip"><svg width="11" height="11" color="#f5c518"><use href="#ic-star"/></svg><span>4.8 · 134 reseñas</span></div>
+          <div class="estudio-av-wrap">
+            <div class="estudio-av" style="overflow:hidden"><img src="assets/fotos/perfil-estudios/blackline-studio.jpeg" style="width:100%;height:100%;object-fit:cover"></div>
+          </div>
+        </div>
+        <div class="estudio-body">
+          <img class="estudio-blur-bg" src="assets/fotos/banners-estudios/blackline-studio.jpeg" alt="">
+          <div class="estudio-blur-overlay"></div>
+          <div class="estudio-body-content">
+            <div class="estudio-name">BLACKLINE STUDIO</div>
+            <div class="estudio-loc-row"><svg width="11" height="11" color="var(--text2)"><use href="#ic-pin"/></svg><span>Gran Vía 42, Madrid</span></div>
+            <div class="estudio-tags">JAPONÉS · REALISMO · BLACKWORK</div>
+          </div>
+        </div>
+      </div>
+      <div class="estudio-card" onclick="toast('Soul Tattoo · Barcelona')">
+        <div class="estudio-banner">
+          <img src="assets/fotos/banners-estudios/soul-tattoo.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+          <div class="estudio-rating-chip"><svg width="11" height="11" color="#f5c518"><use href="#ic-star"/></svg><span>5.0 · 89 reseñas</span></div>
+          <div class="estudio-av-wrap">
+            <div class="estudio-av" style="overflow:hidden"><img src="assets/fotos/perfil-estudios/soul-tattoo.jpg" style="width:100%;height:100%;object-fit:cover"></div>
+          </div>
+        </div>
+        <div class="estudio-body">
+          <img class="estudio-blur-bg" src="assets/fotos/banners-estudios/soul-tattoo.jpg" alt="">
+          <div class="estudio-blur-overlay"></div>
+          <div class="estudio-body-content">
+            <div class="estudio-name">SOUL TATTOO</div>
+            <div class="estudio-loc-row"><svg width="11" height="11" color="var(--text2)"><use href="#ic-pin"/></svg><span>Carrer de Mallorca 18, Barcelona</span></div>
+            <div class="estudio-tags">FINELINE · ACUARELA</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Proyectos guardados -->
+  <div id="fdp-proyectos" style="display:none">
+    <div class="masonry" id="fav-masonry"></div>
+  </div>
+  <div class="spacer"></div>
+</div>
+
 <!-- ══ CITAS ══ -->
 <div class="screen" id="s-citas">
   <div class="page-header">
@@ -1085,9 +1179,9 @@ body{background:#f5f5f5;display:flex;align-items:center;justify-content:center;h
     <svg width="22" height="22" color="var(--text)"><use href="#ic-pen"/></svg>
     <span class="nt-l">Tattoos</span>
   </div>
-  <div class="nt" id="nt-perfil" onclick="switchTab('perfil')">
-    <svg width="22" height="22" color="var(--text)"><use href="#ic-user"/></svg>
-    <span class="nt-l">Perfil</span>
+  <div class="nt" id="nt-favoritos" onclick="switchTab('favoritos')">
+    <svg width="22" height="22" color="var(--text)"><use href="#ic-bookmark"/></svg>
+    <span class="nt-l">Guardados</span>
   </div>
 </div>
 
@@ -1508,9 +1602,39 @@ function resetTopbar(){
 function switchTab(tab){
   resetTopbar();
   document.getElementById('dtabs').style.display=tab==='descubrir'?'flex':'none';
+  const favTabs=document.getElementById('fav-tabs');
+  if(favTabs)favTabs.style.display=tab==='favoritos'?'flex':'none';
   document.querySelectorAll('.nt').forEach(n=>n.classList.remove('on'));
   const el=document.getElementById('nt-'+tab);if(el)el.classList.add('on');
+  const tbPerfil=document.getElementById('tb-perfil-btn');
+  if(tbPerfil)tbPerfil.style.opacity=tab==='perfil'?'1':'.45';
   showScreen(tab);
+  if(tab==='favoritos')showFavTab('profesionales');
+}
+
+function showFavTab(tab){
+  ['profesionales','estudios','proyectos'].forEach(t=>{
+    document.getElementById('fdp-'+t).style.display=t===tab?'block':'none';
+    document.getElementById('fdt-'+t).classList.toggle('on',t===tab);
+  });
+  if(tab==='proyectos'&&!document.getElementById('fav-masonry').children.length){
+    const FAV_POSTS=[
+      {id:'carlos-vega',fotos:['assets/fotos/proyectos/carlos-vega-p01.jpg','assets/fotos/proyectos/carlos-vega-p02.jpg']},
+      {id:'maria-solano',fotos:['assets/fotos/proyectos/maria-solano-p01.jpg']},
+      {id:'ana-torres',fotos:['assets/fotos/proyectos/ana-torres-p01.jpg','assets/fotos/proyectos/ana-torres-p02.jpg']},
+      {id:'rafa-costa',fotos:['assets/fotos/proyectos/rafa-costa-p01.jpg']},
+    ];
+    const grid=document.getElementById('fav-masonry');
+    grid.innerHTML=FAV_POSTS.map((post,i)=>{
+      const pro=PROS[post.id];const n=post.fotos.length;
+      const slides=post.fotos.map(f=>`<img src="${f}" class="sq-slide">`).join('');
+      const arrow=n>1?`<div class="sq-multi"><svg width="13" height="13" color="#fff"><use href="#ic-multi"/></svg></div>`:'';
+      return `<div class="sq-item" onclick="openProyecto(${JSON.stringify(post.fotos)},'${post.id}','favoritos')">
+        <div class="sq-carousel${n>1?' multi':''}"><div class="sq-slides">${slides}</div>${arrow}</div>
+        <div class="sq-overlay"><span class="sq-artist">${pro.nombre}</span></div></div>`;
+    }).join('');
+    initCarousels();
+  }
 }
 
 function setMode(mode){
