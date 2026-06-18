@@ -1590,7 +1590,7 @@ function go(id){
 }
 
 function resetTopbar(){
-  document.getElementById('topbar').innerHTML=`<div class="logo">Ci·Tattoo</div><button class="tb-action" onclick="openSheet('rol')"><span>Vista</span><svg width="12" height="12"><use href="#ic-chevron" transform="rotate(90,6,6)"/></svg></button>`;
+  document.getElementById('topbar').innerHTML=`<div class="logo">Ci·Tattoo</div><button class="tb-action" style="margin-left:auto;padding:6px 8px" onclick="switchTab('perfil')" id="tb-perfil-btn"><svg width="22" height="22" color="var(--text)"><use href="#ic-user"/></svg></button>`;
 }
 
 function switchTab(tab){
