@@ -5,9 +5,48 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
 <title>CiTattoo</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden;background:#f5f5f5;color:#0a0a0a;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif}
-body{display:flex;flex-direction:column;height:100dvh}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;scrollbar-width:none}
+*::-webkit-scrollbar{display:none}
+html,body{height:100%;color:#0a0a0a;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif}
+body{background:#f5f5f5;display:flex;align-items:center;justify-content:center;height:100dvh;overflow:hidden}
+#app{width:100%;max-width:430px;height:100%;display:flex;flex-direction:column;overflow:hidden;position:relative;background:var(--bg)}
+
+@media(min-width:768px){
+  body{background:#1c1c1e}
+  #app{max-height:90dvh;border-radius:22px;box-shadow:0 24px 64px rgba(0,0,0,.55)}
+}
+@media(min-width:1024px){
+  body{align-items:stretch;justify-content:flex-start;background:#111}
+  #app{
+    max-width:none;max-height:none;width:100%;height:100dvh;
+    border-radius:0;box-shadow:none;
+    display:grid;
+    grid-template-columns:220px 1fr;
+    grid-template-rows:auto auto 1fr;
+  }
+  .topbar{grid-column:2;grid-row:1}
+  .dtabs{grid-column:2;grid-row:2}
+  .main{grid-column:2;grid-row:3;overflow-y:auto}
+  .bnav{
+    display:flex !important;
+    grid-column:1;grid-row:1/-1;
+    flex-direction:column;align-items:stretch;justify-content:flex-start;
+    border-top:none;border-right:1px solid var(--border);
+    padding:0;width:220px;background:var(--white);
+  }
+  .bnav::before{
+    content:'Ci·Tattoo';
+    display:block;font-size:17px;font-weight:800;letter-spacing:-.5px;
+    padding:28px 24px 24px;color:var(--text);border-bottom:1px solid var(--border);
+    margin-bottom:8px;
+  }
+  .nt{flex-direction:row;justify-content:flex-start;padding:13px 24px;gap:14px;border-radius:0}
+  .nt-l{font-size:13px;letter-spacing:0;color:var(--text);opacity:.55;font-weight:600}
+  .nt.on .nt-l{color:var(--text);opacity:1}
+  .nt svg{opacity:.45}
+  .nt.on svg{opacity:1}
+  .masonry{columns:3}
+}
 
 :root{
   --bg:#f5f5f5;--white:#ffffff;
@@ -90,21 +129,24 @@ body{display:flex;flex-direction:column;height:100dvh}
 .heart-btn.saved svg path{fill:#fff;stroke:#fff}
 
 /* ── ESTUDIOS LIST ── */
-.estudio-list{display:flex;flex-direction:column;gap:1px;background:var(--border);margin-top:1px}
-.estudio-card{background:var(--white);cursor:pointer;overflow:hidden}
+.estudio-list{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-top:1px}
+.estudio-card{background:var(--white);cursor:pointer}
 .estudio-card:active{background:var(--bg)}
-.estudio-banner{height:120px;position:relative;background:var(--bg);overflow:hidden}
+.estudio-banner{height:130px;position:relative;background:var(--bg);overflow:visible}
 .estudio-banner-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
 .estudio-banner-placeholder{width:100%;height:100%;background:var(--bg);display:flex;align-items:center;justify-content:center}
 .estudio-rating-chip{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);border-radius:100px;padding:4px 10px;display:flex;align-items:center;gap:5px}
 .estudio-rating-chip span{font-size:11px;font-weight:700;color:#fff}
 .estudio-heart-btn{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.9);border:none;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.estudio-av-wrap{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%)}
-.estudio-av{width:44px;height:44px;border-radius:50%;border:2px solid var(--white);background:var(--bg);display:flex;align-items:center;justify-content:center;overflow:hidden}
-.estudio-body{padding:32px 16px 20px;text-align:center;border-top:none}
-.estudio-name{font-size:14px;font-weight:800;letter-spacing:.5px;margin-bottom:4px}
-.estudio-loc-row{display:flex;align-items:center;justify-content:center;gap:4px;color:var(--text2);font-size:11px;margin-bottom:4px}
-.estudio-tags{font-size:10px;color:var(--text3);letter-spacing:.3px}
+.estudio-av-wrap{position:absolute;bottom:-36px;left:50%;transform:translateX(-50%);z-index:2}
+.estudio-av{width:72px;height:72px;border-radius:50%;border:3px solid var(--white);background:var(--bg);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.estudio-body{padding:46px 12px 18px;text-align:center;border-top:none;position:relative;overflow:hidden}
+.estudio-blur-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:blur(48px);transform:scale(1.5);opacity:.65;pointer-events:none}
+.estudio-blur-overlay{position:absolute;inset:0;background:rgba(255,255,255,.28);pointer-events:none}
+.estudio-body-content{position:relative;z-index:1}
+.estudio-name{font-size:15px;font-weight:800;letter-spacing:.4px;margin-bottom:5px}
+.estudio-loc-row{display:flex;align-items:flex-start;justify-content:center;flex-wrap:wrap;gap:3px;color:var(--text);font-size:12px;margin-bottom:5px;opacity:.75}
+.estudio-tags{font-size:11px;color:var(--text2);letter-spacing:.2px;line-height:1.4}
 
 /* ── PROFESIONALES ── */
 .pro-list{display:flex;flex-direction:column;background:var(--white);margin-top:1px}
@@ -262,6 +304,19 @@ body{display:flex;flex-direction:column;height:100dvh}
 /* ── DIVIDER ── */
 .divider{height:1px;background:var(--border)}
 .bg-page{background:var(--bg)}
+
+/* ── CAROUSEL ── */
+.sq-carousel{position:relative;overflow:hidden;cursor:pointer}
+.sq-slides{display:flex;transition:transform .28s ease;touch-action:pan-y}
+.sq-slide{min-width:100%;display:block;width:100%}
+.sq-carousel.multi{aspect-ratio:4/5}
+.sq-carousel.multi .sq-slide{height:100%;object-fit:cover}
+.sq-multi{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);border-radius:6px;padding:4px 5px;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.pd-swipe-hint{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.38);backdrop-filter:blur(4px);border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:2;transition:opacity .4s}
+
+/* ── BANNER PROFESIONAL ── */
+.pp-banner{height:140px;overflow:hidden;flex-shrink:0;background:var(--bg)}
+.pp-banner img{width:100%;height:100%;object-fit:cover}
 </style>
 </head>
 <body>
@@ -307,10 +362,16 @@ body{display:flex;flex-direction:column;height:100dvh}
   <symbol id="ic-send" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
     <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
   </symbol>
+  <symbol id="ic-multi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="7" width="13" height="13" rx="2"/><path d="M7 2h13a2 2 0 012 2v13"/>
+  </symbol>
   <symbol id="ic-star" viewBox="0 0 24 24" fill="currentColor" stroke="none">
     <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
   </symbol>
   <symbol id="ic-bookmark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
+  </symbol>
+  <symbol id="ic-bookmark-fill" viewBox="0 0 24 24" fill="currentColor" stroke="none">
     <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
   </symbol>
   <symbol id="ic-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -332,6 +393,8 @@ body{display:flex;flex-direction:column;height:100dvh}
     <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
   </symbol>
 </svg>
+
+<div id="app">
 
 <!-- TOPBAR -->
 <div class="topbar" id="topbar">
@@ -383,8 +446,8 @@ body{display:flex;flex-direction:column;height:100dvh}
       <div class="rol-card-icon">
         <svg width="18" height="18" color="var(--text2)"><use href="#ic-pen"/></svg>
       </div>
-      <div class="rol-card-title">Soy tatuador / estudio</div>
-      <div class="rol-card-desc">Gestiona tu agenda, proyectos y clientes. Publica tu trabajo.</div>
+      <div class="rol-card-title">Soy profesional</div>
+      <div class="rol-card-desc">Tatuador, perforador o estudio. Gestiona tu agenda, proyectos y clientes. Publica tu trabajo.</div>
     </div>
   </div>
 </div>
@@ -394,56 +457,7 @@ body{display:flex;flex-direction:column;height:100dvh}
 
   <!-- Proyectos -->
   <div id="dp-proyectos">
-    <div class="masonry">
-      <div class="sq-item" onclick="go('proyecto-detalle')">
-        <img src="assets/fotos/IMG-20260616-WA0048.jpg" style="width:100%;display:block">
-        <div class="sq-overlay"><span class="sq-artist">Carlos Vega</span><button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this.querySelector('svg'))"><svg width="15" height="15" color="#fff"><use href="#ic-heart"/></svg></button></div>
-      </div>
-      <div class="sq-item" onclick="go('proyecto-detalle')">
-        <img src="assets/fotos/IMG-20260616-WA0049.jpg" style="width:100%;display:block">
-        <div class="sq-overlay"><span class="sq-artist">María Solano</span><button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this.querySelector('svg'))"><svg width="15" height="15" color="#fff"><use href="#ic-heart"/></svg></button></div>
-      </div>
-      <div class="sq-item" onclick="go('proyecto-detalle')">
-        <img src="assets/fotos/IMG-20260616-WA0050.jpg" style="width:100%;display:block">
-        <div class="sq-overlay"><span class="sq-artist">Ana Torres</span><button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this.querySelector('svg'))"><svg width="15" height="15" color="#fff"><use href="#ic-heart"/></svg></button></div>
-      </div>
-      <div class="sq-item" onclick="go('proyecto-detalle')">
-        <img src="assets/fotos/IMG-20260616-WA0051.jpg" style="width:100%;display:block">
-        <div class="sq-overlay"><span class="sq-artist">Rafa Costa</span><button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this.querySelector('svg'))"><svg width="15" height="15" color="#fff"><use href="#ic-heart"/></svg></button></div>
-      </div>
-      <div class="sq-item" onclick="go('proyecto-detalle')">
-        <img src="assets/fotos/IMG-20260616-WA0052.jpg" style="width:100%;display:block">
-        <div class="sq-overlay"><span class="sq-artist">Laura M.</span><button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this.querySelector('svg'))"><svg width="15" height="15" color="#fff"><use href="#ic-heart"/></svg></button></div>
-      </div>
-      <div class="sq-item" onclick="go('proyecto-detalle')">
-        <img src="assets/fotos/IMG-20260616-WA0054.jpg" style="width:100%;display:block">
-        <div class="sq-overlay"><span class="sq-artist">Marcos R.</span><button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this.querySelector('svg'))"><svg width="15" height="15" color="#fff"><use href="#ic-heart"/></svg></button></div>
-      </div>
-      <div class="sq-item" onclick="go('proyecto-detalle')">
-        <img src="assets/fotos/IMG-20260616-WA0056.jpg" style="width:100%;display:block">
-        <div class="sq-overlay"><span class="sq-artist">Sergio V.</span><button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this.querySelector('svg'))"><svg width="15" height="15" color="#fff"><use href="#ic-heart"/></svg></button></div>
-      </div>
-      <div class="sq-item" onclick="go('proyecto-detalle')">
-        <img src="assets/fotos/IMG-20260616-WA0067.jpg" style="width:100%;display:block">
-        <div class="sq-overlay"><span class="sq-artist">Paula G.</span><button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this.querySelector('svg'))"><svg width="15" height="15" color="#fff"><use href="#ic-heart"/></svg></button></div>
-      </div>
-      <div class="sq-item" onclick="go('proyecto-detalle')">
-        <img src="assets/fotos/IMG-20260616-WA0072.jpg" style="width:100%;display:block">
-        <div class="sq-overlay"><span class="sq-artist">Luis G.</span><button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this.querySelector('svg'))"><svg width="15" height="15" color="#fff"><use href="#ic-heart"/></svg></button></div>
-      </div>
-      <div class="sq-item" onclick="go('proyecto-detalle')">
-        <img src="assets/fotos/IMG-20260616-WA0076.jpg" style="width:100%;display:block">
-        <div class="sq-overlay"><span class="sq-artist">Carlos Vega</span><button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this.querySelector('svg'))"><svg width="15" height="15" color="#fff"><use href="#ic-heart"/></svg></button></div>
-      </div>
-      <div class="sq-item" onclick="go('proyecto-detalle')">
-        <img src="assets/fotos/IMG-20260616-WA0077.jpg" style="width:100%;display:block">
-        <div class="sq-overlay"><span class="sq-artist">Nadia K.</span><button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this.querySelector('svg'))"><svg width="15" height="15" color="#fff"><use href="#ic-heart"/></svg></button></div>
-      </div>
-      <div class="sq-item" onclick="go('proyecto-detalle')">
-        <img src="assets/fotos/IMG-20260616-WA0083.jpg" style="width:100%;display:block">
-        <div class="sq-overlay"><span class="sq-artist">Álvaro S.</span><button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this.querySelector('svg'))"><svg width="15" height="15" color="#fff"><use href="#ic-heart"/></svg></button></div>
-      </div>
-    </div>
+    <div class="masonry" id="masonry-grid"></div>
   </div>
 
   <!-- Estudios -->
@@ -452,7 +466,7 @@ body{display:flex;flex-direction:column;height:100dvh}
 
       <div class="estudio-card" onclick="go('estudio-detalle')">
         <div class="estudio-banner">
-          <div class="estudio-banner-placeholder" style="background:#ebebeb"></div>
+          <img src="assets/fotos/banners-estudios/blackline-studio.jpeg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
           <div class="estudio-rating-chip">
             <svg width="11" height="11" color="#f5c518"><use href="#ic-star"/></svg>
             <span>4.8 · 134 reseñas</span>
@@ -461,22 +475,26 @@ body{display:flex;flex-direction:column;height:100dvh}
             <svg width="15" height="15" color="var(--text)"><use href="#ic-heart"/></svg>
           </button>
           <div class="estudio-av-wrap">
-            <div class="estudio-av" style="background:#ddd"></div>
+            <div class="estudio-av" style="overflow:hidden"><img src="assets/fotos/perfil-estudios/blackline-studio.jpeg" style="width:100%;height:100%;object-fit:cover"></div>
           </div>
         </div>
         <div class="estudio-body">
-          <div class="estudio-name">BLACKLINE STUDIO</div>
-          <div class="estudio-loc-row">
-            <svg width="11" height="11" color="var(--text2)"><use href="#ic-pin"/></svg>
-            <span>Gran Vía 42, Madrid</span>
+          <img class="estudio-blur-bg" src="assets/fotos/banners-estudios/blackline-studio.jpeg" alt="">
+          <div class="estudio-blur-overlay"></div>
+          <div class="estudio-body-content">
+            <div class="estudio-name">BLACKLINE STUDIO</div>
+            <div class="estudio-loc-row">
+              <svg width="11" height="11" color="var(--text2)"><use href="#ic-pin"/></svg>
+              <span>Gran Vía 42, Madrid</span>
+            </div>
+            <div class="estudio-tags">JAPONÉS · REALISMO · BLACKWORK</div>
           </div>
-          <div class="estudio-tags">JAPONÉS · REALISMO · BLACKWORK</div>
         </div>
       </div>
 
       <div class="estudio-card" onclick="toast('Soul Tattoo · Barcelona')">
         <div class="estudio-banner">
-          <div class="estudio-banner-placeholder" style="background:#e0e0e0"></div>
+          <img src="assets/fotos/banners-estudios/soul-tattoo.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
           <div class="estudio-rating-chip">
             <svg width="11" height="11" color="#f5c518"><use href="#ic-star"/></svg>
             <span>5.0 · 89 reseñas</span>
@@ -485,22 +503,26 @@ body{display:flex;flex-direction:column;height:100dvh}
             <svg width="15" height="15" color="var(--text)"><use href="#ic-heart"/></svg>
           </button>
           <div class="estudio-av-wrap">
-            <div class="estudio-av" style="background:#ccc"></div>
+            <div class="estudio-av" style="overflow:hidden"><img src="assets/fotos/perfil-estudios/soul-tattoo.jpg" style="width:100%;height:100%;object-fit:cover"></div>
           </div>
         </div>
         <div class="estudio-body">
-          <div class="estudio-name">SOUL TATTOO</div>
-          <div class="estudio-loc-row">
-            <svg width="11" height="11" color="var(--text2)"><use href="#ic-pin"/></svg>
-            <span>Carrer de Mallorca 18, Barcelona</span>
+          <img class="estudio-blur-bg" src="assets/fotos/banners-estudios/soul-tattoo.jpg" alt="">
+          <div class="estudio-blur-overlay"></div>
+          <div class="estudio-body-content">
+            <div class="estudio-name">SOUL TATTOO</div>
+            <div class="estudio-loc-row">
+              <svg width="11" height="11" color="var(--text2)"><use href="#ic-pin"/></svg>
+              <span>Carrer de Mallorca 18, Barcelona</span>
+            </div>
+            <div class="estudio-tags">FINELINE · ACUARELA</div>
           </div>
-          <div class="estudio-tags">FINELINE · ACUARELA</div>
         </div>
       </div>
 
       <div class="estudio-card" onclick="toast('Ink 34 · Valencia')">
         <div class="estudio-banner">
-          <div class="estudio-banner-placeholder" style="background:#e8e8e8"></div>
+          <img src="assets/fotos/banners-estudios/ink-34.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
           <div class="estudio-rating-chip">
             <svg width="11" height="11" color="#f5c518"><use href="#ic-star"/></svg>
             <span>4.7 · 207 reseñas</span>
@@ -509,22 +531,26 @@ body{display:flex;flex-direction:column;height:100dvh}
             <svg width="15" height="15" color="var(--text)"><use href="#ic-heart"/></svg>
           </button>
           <div class="estudio-av-wrap">
-            <div class="estudio-av" style="background:#d5d5d5"></div>
+            <div class="estudio-av" style="overflow:hidden"><img src="assets/fotos/perfil-estudios/ink-34.jpg" style="width:100%;height:100%;object-fit:cover"></div>
           </div>
         </div>
         <div class="estudio-body">
-          <div class="estudio-name">INK 34</div>
-          <div class="estudio-loc-row">
-            <svg width="11" height="11" color="var(--text2)"><use href="#ic-pin"/></svg>
-            <span>Calle Colón 34, Valencia</span>
+          <img class="estudio-blur-bg" src="assets/fotos/banners-estudios/ink-34.jpg" alt="">
+          <div class="estudio-blur-overlay"></div>
+          <div class="estudio-body-content">
+            <div class="estudio-name">INK 34</div>
+            <div class="estudio-loc-row">
+              <svg width="11" height="11" color="var(--text2)"><use href="#ic-pin"/></svg>
+              <span>Calle Colón 34, Valencia</span>
+            </div>
+            <div class="estudio-tags">REALISMO · TRADICIONAL · NEO-TRAD</div>
           </div>
-          <div class="estudio-tags">REALISMO · TRADICIONAL · NEO-TRAD</div>
         </div>
       </div>
 
       <div class="estudio-card" onclick="toast('Dark Lines · Sevilla')">
         <div class="estudio-banner">
-          <div class="estudio-banner-placeholder" style="background:#e4e4e4"></div>
+          <img src="assets/fotos/banners-estudios/dark-lines.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
           <div class="estudio-rating-chip">
             <svg width="11" height="11" color="#f5c518"><use href="#ic-star"/></svg>
             <span>5.0 · 312 reseñas</span>
@@ -533,16 +559,20 @@ body{display:flex;flex-direction:column;height:100dvh}
             <svg width="15" height="15" color="var(--text)"><use href="#ic-heart"/></svg>
           </button>
           <div class="estudio-av-wrap">
-            <div class="estudio-av" style="background:#d0d0d0"></div>
+            <div class="estudio-av" style="overflow:hidden"><img src="assets/fotos/perfil-estudios/dark-lines.jpg" style="width:100%;height:100%;object-fit:cover"></div>
           </div>
         </div>
         <div class="estudio-body">
-          <div class="estudio-name">DARK LINES</div>
-          <div class="estudio-loc-row">
-            <svg width="11" height="11" color="var(--text2)"><use href="#ic-pin"/></svg>
-            <span>Calle Betis 7, Sevilla</span>
+          <img class="estudio-blur-bg" src="assets/fotos/banners-estudios/dark-lines.jpg" alt="">
+          <div class="estudio-blur-overlay"></div>
+          <div class="estudio-body-content">
+            <div class="estudio-name">DARK LINES</div>
+            <div class="estudio-loc-row">
+              <svg width="11" height="11" color="var(--text2)"><use href="#ic-pin"/></svg>
+              <span>Calle Betis 7, Sevilla</span>
+            </div>
+            <div class="estudio-tags">BLACKWORK · GEOMÉTRICO</div>
           </div>
-          <div class="estudio-tags">BLACKWORK · GEOMÉTRICO</div>
         </div>
       </div>
 
@@ -552,17 +582,17 @@ body{display:flex;flex-direction:column;height:100dvh}
   <!-- Profesionales -->
   <div id="dp-profesionales" style="display:none">
     <div class="pro-list">
-      <div class="pro-item" onclick="go('pro-perfil')">
-        <div class="pro-av" style="background:#e0e0e0"></div>
+      <div class="pro-item" onclick="openPro('carlos-vega')">
+        <div class="pro-av"><img src="assets/fotos/perfil-tatuadores/carlos-vega.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:50%"></div>
         <div class="pro-info">
           <div class="pro-name">Carlos Vega</div>
           <div class="pro-city">Madrid · 2.1 km</div>
-          <div class="pro-styles">JAPONÉS · REALISMO</div>
+          <div class="pro-styles">JAPONÉS · REALISMO · BLACKWORK</div>
         </div>
         <button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this)"><svg width="18" height="18" color="var(--text3)"><use href="#ic-heart"/></svg></button>
       </div>
-      <div class="pro-item" onclick="toast('María Solano · Fineline · Barcelona')">
-        <div class="pro-av" style="background:#d8d8d8"></div>
+      <div class="pro-item" onclick="openPro('maria-solano')">
+        <div class="pro-av"><img src="assets/fotos/perfil-tatuadores/maria-solano.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:50%"></div>
         <div class="pro-info">
           <div class="pro-name">María Solano</div>
           <div class="pro-city">Barcelona · 5.2 km</div>
@@ -570,8 +600,8 @@ body{display:flex;flex-direction:column;height:100dvh}
         </div>
         <button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this)"><svg width="18" height="18" color="var(--text3)"><use href="#ic-heart"/></svg></button>
       </div>
-      <div class="pro-item" onclick="toast('Rafa Costa · Realismo · Valencia')">
-        <div class="pro-av" style="background:#d0d0d0"></div>
+      <div class="pro-item" onclick="openPro('rafa-costa')">
+        <div class="pro-av"><img src="assets/fotos/perfil-tatuadores/rafa-costa.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:50%"></div>
         <div class="pro-info">
           <div class="pro-name">Rafa Costa</div>
           <div class="pro-city">Valencia · 3.4 km</div>
@@ -579,8 +609,8 @@ body{display:flex;flex-direction:column;height:100dvh}
         </div>
         <button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this)"><svg width="18" height="18" color="var(--text3)"><use href="#ic-heart"/></svg></button>
       </div>
-      <div class="pro-item" onclick="toast('Ana Torres · Japonés · Madrid')">
-        <div class="pro-av" style="background:#e8e8e8"></div>
+      <div class="pro-item" onclick="openPro('ana-torres')">
+        <div class="pro-av"><img src="assets/fotos/perfil-tatuadores/ana-torres.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:50%"></div>
         <div class="pro-info">
           <div class="pro-name">Ana Torres</div>
           <div class="pro-city">Madrid · 1.2 km</div>
@@ -588,8 +618,8 @@ body{display:flex;flex-direction:column;height:100dvh}
         </div>
         <button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this)"><svg width="18" height="18" color="var(--text3)"><use href="#ic-heart"/></svg></button>
       </div>
-      <div class="pro-item" onclick="toast('Laura M. · Fineline · Madrid')">
-        <div class="pro-av" style="background:#ddd"></div>
+      <div class="pro-item" onclick="toast('Laura M. próximamente')">
+        <div class="pro-av"><img src="assets/fotos/perfil-tatuadores/laura-m.avif" style="width:100%;height:100%;object-fit:cover;border-radius:50%"></div>
         <div class="pro-info">
           <div class="pro-name">Laura M.</div>
           <div class="pro-city">Madrid · 2.7 km</div>
@@ -597,8 +627,8 @@ body{display:flex;flex-direction:column;height:100dvh}
         </div>
         <button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this)"><svg width="18" height="18" color="var(--text3)"><use href="#ic-heart"/></svg></button>
       </div>
-      <div class="pro-item" onclick="toast('Marcos R. · Blackwork · Sevilla')">
-        <div class="pro-av" style="background:#d5d5d5"></div>
+      <div class="pro-item" onclick="openPro('marcos-r')">
+        <div class="pro-av"><img src="assets/fotos/perfil-tatuadores/marcos-r.avif" style="width:100%;height:100%;object-fit:cover;border-radius:50%"></div>
         <div class="pro-info">
           <div class="pro-name">Marcos R.</div>
           <div class="pro-city">Sevilla · 4.1 km</div>
@@ -666,34 +696,34 @@ body{display:flex;flex-direction:column;height:100dvh}
 
 <!-- ══ PROYECTO DETALLE ══ -->
 <div class="screen" id="s-proyecto-detalle">
-  <div class="pd-photo" style="background:#d0d0d0;display:block;padding:0">
-    <img src="assets/fotos/IMG-20260616-WA0048.jpg" style="width:100%;display:block">
-    <button class="pd-save-btn" style="position:absolute;top:10px;right:10px" onclick="toggleHeart(this.querySelector('svg'))">
-      <svg width="18" height="18" color="var(--text)"><use href="#ic-heart"/></svg>
+  <div style="position:relative;overflow:hidden;background:#111">
+    <div id="pd-slides" style="display:flex;transition:transform .28s ease;touch-action:pan-y"></div>
+    <button class="pd-save-btn" style="position:absolute;top:10px;right:10px;z-index:2" onclick="toggleHeart(this.querySelector('svg'))">
+      <svg width="18" height="18" color="var(--text)"><use href="#ic-bookmark"/></svg>
     </button>
   </div>
   <div class="pd-toggle-bar">
-    <div class="pd-tab on" id="pdt-artista" onclick="pdTab('artista')">Carlos Vega</div>
-    <div class="pd-tab" id="pdt-estudio" onclick="pdTab('estudio')">Blackline Studio</div>
+    <div class="pd-tab on" id="pdt-artista" onclick="pdTab('artista')">—</div>
+    <div class="pd-tab" id="pdt-estudio" onclick="pdTab('estudio')">—</div>
   </div>
   <div class="pd-info" id="pdi-artista">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
-      <div style="width:44px;height:44px;border-radius:50%;background:var(--bg);border:1px solid var(--border);flex-shrink:0"></div>
+      <div id="pd-av" style="width:44px;height:44px;border-radius:50%;background:var(--bg);border:1px solid var(--border);flex-shrink:0;overflow:hidden"></div>
       <div>
-        <div style="font-size:15px;font-weight:800;letter-spacing:-.3px">Carlos Vega</div>
-        <div style="font-size:11px;color:var(--text2);margin-top:2px">4.9 · 87 trabajos · Madrid</div>
-        <div style="font-size:10px;color:var(--text3);letter-spacing:.3px;margin-top:2px">JAPONÉS · REALISMO · BLACKWORK</div>
+        <div id="pd-nombre" style="font-size:15px;font-weight:800;letter-spacing:-.3px"></div>
+        <div id="pd-rating" style="font-size:11px;color:var(--text2);margin-top:2px"></div>
+        <div id="pd-estilos" style="font-size:10px;color:var(--text3);letter-spacing:.3px;margin-top:2px"></div>
       </div>
     </div>
-    <button class="btn btn-solid" onclick="go('pro-perfil')">Ver perfil completo</button>
+    <button class="btn btn-solid" id="pd-ver-btn" onclick="">Ver perfil completo</button>
   </div>
   <div class="pd-info" id="pdi-estudio" style="display:none">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
       <div style="width:44px;height:44px;border-radius:50%;background:var(--bg);border:1px solid var(--border);flex-shrink:0"></div>
       <div>
-        <div style="font-size:15px;font-weight:800;letter-spacing:-.3px">Blackline Studio</div>
-        <div style="font-size:11px;color:var(--text2);margin-top:2px">Gran Vía 42, Madrid · 3 tatuadores</div>
-        <div style="font-size:10px;color:var(--text3);letter-spacing:.3px;margin-top:2px">4.8 · Abierto ahora</div>
+        <div id="pd-estudio-nombre" style="font-size:15px;font-weight:800;letter-spacing:-.3px"></div>
+        <div id="pd-estudio-dir" style="font-size:11px;color:var(--text2);margin-top:2px"></div>
+        <div id="pd-estudio-info" style="font-size:10px;color:var(--text3);letter-spacing:.3px;margin-top:2px"></div>
       </div>
     </div>
     <button class="btn btn-solid" onclick="go('estudio-detalle')">Ver estudio</button>
@@ -702,7 +732,7 @@ body{display:flex;flex-direction:column;height:100dvh}
 
 <!-- ══ ESTUDIO DETALLE ══ -->
 <div class="screen" id="s-estudio-detalle">
-  <div class="estudio-detail-banner" style="background:#e0e0e0"></div>
+  <div class="estudio-detail-banner" style="overflow:hidden;padding:0"><img src="assets/fotos/banners-estudios/blackline-studio.jpeg" style="width:100%;height:100%;object-fit:cover"></div>
   <div class="estudio-detail-info">
     <div style="font-size:18px;font-weight:800;letter-spacing:-.3px;margin-bottom:4px">Blackline Studio</div>
     <div style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2);margin-bottom:4px">
@@ -713,19 +743,19 @@ body{display:flex;flex-direction:column;height:100dvh}
   </div>
   <div class="sec-label">Tatuadores</div>
   <div class="pro-list">
-    <div class="pro-item" onclick="go('pro-perfil')">
-      <div class="pro-av" style="background:#ddd"></div>
+    <div class="pro-item" onclick="openPro('carlos-vega')">
+      <div class="pro-av"><img src="assets/fotos/perfil-tatuadores/carlos-vega.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:50%"></div>
       <div class="pro-info"><div class="pro-name">Carlos Vega</div><div class="pro-city">Admin · Japonés · Realismo</div></div>
       <span style="font-size:10px;color:var(--text2);border:1px solid var(--border);border-radius:100px;padding:3px 10px;font-weight:600">Activo</span>
     </div>
-    <div class="pro-item" onclick="toast('María Solano · Fineline')">
-      <div class="pro-av" style="background:#d5d5d5"></div>
-      <div class="pro-info"><div class="pro-name">María Solano</div><div class="pro-city">Tatuadora · Fineline</div></div>
+    <div class="pro-item" onclick="openPro('ana-torres')">
+      <div class="pro-av"><img src="assets/fotos/perfil-tatuadores/ana-torres.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:50%"></div>
+      <div class="pro-info"><div class="pro-name">Ana Torres</div><div class="pro-city">Tatuadora · Japonés · Tradicional</div></div>
       <span style="font-size:10px;color:var(--text2);border:1px solid var(--border);border-radius:100px;padding:3px 10px;font-weight:600">Activa</span>
     </div>
-    <div class="pro-item" onclick="toast('Rafa Costa · Guest hasta 20 Jun')" style="opacity:.5">
-      <div class="pro-av" style="background:#ccc"></div>
-      <div class="pro-info"><div class="pro-name">Rafa Costa</div><div class="pro-city">Guest · hasta 20 Jun · Blackwork</div></div>
+    <div class="pro-item" onclick="openPro('rafa-costa')" style="opacity:.6">
+      <div class="pro-av"><img src="assets/fotos/perfil-tatuadores/rafa-costa.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:50%"></div>
+      <div class="pro-info"><div class="pro-name">Rafa Costa</div><div class="pro-city">Guest · hasta 30 Jun · Blackwork</div></div>
       <span style="font-size:10px;color:var(--text3);border:1px solid var(--border);border-radius:100px;padding:3px 10px;font-weight:600">Guest</span>
     </div>
   </div>
@@ -733,20 +763,19 @@ body{display:flex;flex-direction:column;height:100dvh}
 
 <!-- ══ PERFIL PROFESIONAL ══ -->
 <div class="screen" id="s-pro-perfil">
+  <div class="pp-banner" id="pp-banner"><img id="pp-banner-img" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></div>
   <div class="pp-hero">
-    <div class="pp-av"></div>
-    <div class="pp-name">Carlos Vega</div>
-    <div class="pp-meta">Blackline Studio · Gran Vía 42, Madrid</div>
-    <div class="pp-rating">4.9 · 87 trabajos · 2.1 km</div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
-      <span class="chip">Japonés</span><span class="chip">Realismo</span><span class="chip">Blackwork</span>
-    </div>
+    <div class="pp-av" id="pp-av"></div>
+    <div class="pp-name" id="pp-name"></div>
+    <div class="pp-meta" id="pp-meta"></div>
+    <div class="pp-rating" id="pp-rating"></div>
+    <div id="pp-chips" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"></div>
     <div class="pp-actions">
       <button class="btn btn-solid" style="flex:1;padding:12px" onclick="openChat()">Contactar</button>
       <button class="btn btn-outline" style="width:44px;padding:12px;flex-shrink:0" onclick="toast('Perfil compartido')">
         <svg width="16" height="16" color="var(--text2)"><use href="#ic-share"/></svg>
       </button>
-      <button class="btn btn-outline" style="width:44px;padding:12px;flex-shrink:0" onclick="toast('Gran Vía 42, Madrid')">
+      <button class="btn btn-outline" style="width:44px;padding:12px;flex-shrink:0" id="pp-map-btn" onclick="toast('Cargando mapa...')">
         <svg width="16" height="16" color="var(--text2)"><use href="#ic-map"/></svg>
       </button>
     </div>
@@ -758,50 +787,15 @@ body{display:flex;flex-direction:column;height:100dvh}
   </div>
 
   <div class="pp-panel on" id="ppc-servicios">
-    <div class="svc-list">
-      <div class="svc-item">
-        <div class="svc-top"><div class="svc-name">Flash del día</div><div class="svc-price">80€</div></div>
-        <div class="svc-desc">Diseños disponibles hoy, sesión única. Precio cerrado.</div>
-        <div style="display:flex;gap:6px"><span class="chip">~2h</span><span class="chip">Disponible hoy</span></div>
-      </div>
-      <div class="svc-item">
-        <div class="svc-top"><div class="svc-name">Sesión única</div><div class="svc-price">Desde 120€</div></div>
-        <div class="svc-desc">Tu diseño en una sola sesión.</div>
-        <div style="display:flex;gap:6px"><span class="chip">1–3h</span></div>
-      </div>
-      <div class="svc-item" style="border-bottom:none">
-        <div class="svc-top"><div class="svc-name">Proyecto personalizado</div><div style="font-size:13px;font-weight:700;color:var(--text2)">A consultar</div></div>
-        <div class="svc-desc">Diseño exclusivo en múltiples sesiones.</div>
-        <div style="display:flex;gap:6px"><span class="chip">Multi-sesión</span></div>
-      </div>
-    </div>
+    <div class="svc-list"></div>
   </div>
 
   <div class="pp-panel" id="ppc-ofertas">
-    <div class="oferta-list">
-      <div class="oferta-item">
-        <div class="oferta-tag">Hasta el 30 Jun</div>
-        <div class="oferta-top">
-          <div><div class="oferta-name">Flash de verano</div></div>
-          <div style="text-align:right"><div class="oferta-price-old">120€</div><div class="oferta-price">70€</div></div>
-        </div>
-        <div class="oferta-bottom"><span class="chip">−42%</span><span class="chip">~2h</span></div>
-      </div>
-    </div>
+    <div class="oferta-list"></div>
   </div>
 
   <div class="pp-panel" id="ppc-trabajos">
-    <div class="trabajos-grid">
-      <div class="trabajo-item" onclick="go('proyecto-detalle')"><img src="assets/fotos/IMG-20260616-WA0086.jpg" style="width:100%;height:100%;object-fit:cover"></div>
-      <div class="trabajo-item" onclick="go('proyecto-detalle')"><img src="assets/fotos/IMG-20260616-WA0087.jpg" style="width:100%;height:100%;object-fit:cover"></div>
-      <div class="trabajo-item" onclick="go('proyecto-detalle')"><img src="assets/fotos/IMG-20260616-WA0089.jpg" style="width:100%;height:100%;object-fit:cover"></div>
-      <div class="trabajo-item" onclick="go('proyecto-detalle')"><img src="assets/fotos/IMG-20260616-WA0092.jpg" style="width:100%;height:100%;object-fit:cover"></div>
-      <div class="trabajo-item" onclick="go('proyecto-detalle')"><img src="assets/fotos/IMG-20260616-WA0093.jpg" style="width:100%;height:100%;object-fit:cover"></div>
-      <div class="trabajo-item" onclick="go('proyecto-detalle')"><img src="assets/fotos/IMG-20260616-WA0097.jpg" style="width:100%;height:100%;object-fit:cover"></div>
-      <div class="trabajo-item" onclick="go('proyecto-detalle')"><img src="assets/fotos/IMG-20260616-WA0098.jpg" style="width:100%;height:100%;object-fit:cover"></div>
-      <div class="trabajo-item" onclick="go('proyecto-detalle')"><img src="assets/fotos/IMG-20260616-WA0099.jpg" style="width:100%;height:100%;object-fit:cover"></div>
-      <div class="trabajo-item" onclick="go('proyecto-detalle')"><img src="assets/fotos/IMG-20260616-WA0101.jpg" style="width:100%;height:100%;object-fit:cover"></div>
-    </div>
+    <div class="trabajos-grid"></div>
     <div class="spacer"></div>
   </div>
 </div>
@@ -992,6 +986,8 @@ body{display:flex;flex-direction:column;height:100dvh}
   </div>
 </div>
 
+</div><!-- /#app -->
+
 <!-- SHEET ROL -->
 <div class="overlay" id="sheet-rol">
   <div class="sheet">
@@ -1013,7 +1009,7 @@ body{display:flex;flex-direction:column;height:100dvh}
     <div style="display:flex;align-items:center;gap:8px;flex:1">
       <div style="width:30px;height:30px;border-radius:50%;background:var(--bg);border:1px solid var(--border)"></div>
       <div>
-        <div style="font-size:13px;font-weight:700">Carlos Vega</div>
+        <div id="chat-pro-nombre" style="font-size:13px;font-weight:700">Carlos Vega</div>
         <div style="font-size:10px;color:var(--text2)">En línea</div>
       </div>
     </div>
@@ -1053,6 +1049,252 @@ body{display:flex;flex-direction:column;height:100dvh}
 <div class="toast" id="toast"></div>
 
 <script>
+/* ── DATOS ── */
+const PROS = {
+  'carlos-vega':{
+    nombre:'Carlos Vega', estudio:'Blackline Studio', dir:'Gran Vía 42, Madrid', dist:'2.1 km',
+    rating:'4.9', nTrabajos:87, estilos:['Japonés','Realismo','Blackwork'],
+    perfil:'assets/fotos/perfil-tatuadores/carlos-vega.jpg',
+    banner:'assets/fotos/banners-tatuadores/carlos-vega.avif',
+    servicios:[
+      {n:'Flash del día',p:'80€',d:'Diseños disponibles hoy, sesión única. Precio cerrado.',c:['~2h','Disponible hoy']},
+      {n:'Sesión única',p:'Desde 120€',d:'Tu diseño en una sola sesión.',c:['1–3h']},
+      {n:'Proyecto personalizado',p:'A consultar',d:'Diseño exclusivo en múltiples sesiones.',c:['Multi-sesión']},
+    ],
+    ofertas:[{t:'Flash de verano',h:'Hasta el 30 Jun',pa:'120€',p:'70€',c:['−42%','~2h']}],
+    trabajos:['assets/fotos/proyectos/carlos-vega-t01.jpg','assets/fotos/proyectos/carlos-vega-t02.jpg','assets/fotos/proyectos/carlos-vega-t03.jpg','assets/fotos/proyectos/carlos-vega-t04.jpg','assets/fotos/proyectos/carlos-vega-t05.jpg','assets/fotos/proyectos/carlos-vega-t06.jpg'],
+  },
+  'maria-solano':{
+    nombre:'María Solano', estudio:'Soul Tattoo', dir:'Carrer de Mallorca 18, Barcelona', dist:'5.2 km',
+    rating:'5.0', nTrabajos:63, estilos:['Fineline','Acuarela'],
+    perfil:'assets/fotos/perfil-tatuadores/maria-solano.jpg',
+    banner:'assets/fotos/banners-tatuadores/maria-solano.avif',
+    servicios:[
+      {n:'Fineline mini',p:'Desde 50€',d:'Diseños delicados de pequeño formato, hasta 5cm.',c:['~1h','Hasta 5cm']},
+      {n:'Sesión única',p:'Desde 100€',d:'Tu diseño en una sola sesión.',c:['1–3h']},
+      {n:'Proyecto personalizado',p:'A consultar',d:'Diseño exclusivo multi-sesión.',c:['Multi-sesión']},
+    ],
+    ofertas:[{t:'Fineline mini',h:'Esta semana',pa:'80€',p:'50€',c:['−38%','~1h']}],
+    trabajos:['assets/fotos/proyectos/maria-solano-t01.jpg','assets/fotos/proyectos/maria-solano-t02.jpg','assets/fotos/proyectos/maria-solano-p01.jpg','assets/fotos/proyectos/maria-solano-p02.jpg','assets/fotos/proyectos/maria-solano-p03.jpg','assets/fotos/proyectos/maria-solano-extra-01.avif'],
+  },
+  'rafa-costa':{
+    nombre:'Rafa Costa', estudio:'Ink 34', dir:'Calle Colón 34, Valencia', dist:'3.4 km',
+    rating:'4.7', nTrabajos:124, estilos:['Realismo','Blackwork'],
+    perfil:'assets/fotos/perfil-tatuadores/rafa-costa.jpg',
+    banner:'assets/fotos/banners-tatuadores/rafa-costa.jpg',
+    servicios:[
+      {n:'Sesión única',p:'Desde 130€',d:'Tu diseño en una sola sesión.',c:['1–4h']},
+      {n:'Proyecto realismo',p:'A consultar',d:'Retratos y diseños de alta complejidad.',c:['Multi-sesión']},
+    ],
+    ofertas:[],
+    trabajos:['assets/fotos/proyectos/rafa-costa-t01.jpg','assets/fotos/proyectos/rafa-costa-p01.jpg','assets/fotos/proyectos/rafa-costa-p02.jpg','assets/fotos/proyectos/rafa-costa-extra-01.jpg','assets/fotos/proyectos/rafa-costa-extra-02.jpg'],
+  },
+  'ana-torres':{
+    nombre:'Ana Torres', estudio:'Blackline Studio', dir:'Gran Vía 42, Madrid', dist:'1.2 km',
+    rating:'4.8', nTrabajos:56, estilos:['Japonés','Tradicional'],
+    perfil:'assets/fotos/perfil-tatuadores/ana-torres.jpg',
+    banner:'assets/fotos/banners-tatuadores/ana-torres.jpg',
+    servicios:[
+      {n:'Flash japonés',p:'Desde 90€',d:'Diseños de estilo japonés tradicional.',c:['~2h']},
+      {n:'Proyecto personalizado',p:'A consultar',d:'Diseño exclusivo multi-sesión.',c:['Multi-sesión']},
+    ],
+    ofertas:[],
+    trabajos:['assets/fotos/proyectos/ana-torres-t01.jpg','assets/fotos/proyectos/ana-torres-p01.jpg','assets/fotos/proyectos/ana-torres-p02.jpg','assets/fotos/proyectos/ana-torres-p03.jpg','assets/fotos/proyectos/ana-torres-extra-01.jpg','assets/fotos/proyectos/ana-torres-extra-02.jpg'],
+  },
+  'marcos-r':{
+    nombre:'Marcos R.', estudio:'Dark Lines', dir:'Calle Betis 7, Sevilla', dist:'4.1 km',
+    rating:'4.9', nTrabajos:98, estilos:['Blackwork','Geométrico'],
+    perfil:'assets/fotos/perfil-tatuadores/marcos-r.avif',
+    banner:'assets/fotos/banners-tatuadores/marcos-r.jpg',
+    servicios:[
+      {n:'Blackwork express',p:'90€',d:'Sesión intensa de blackwork geométrico.',c:['~2.5h']},
+      {n:'Proyecto geométrico',p:'A consultar',d:'Diseño geométrico exclusivo.',c:['Multi-sesión']},
+    ],
+    ofertas:[{t:'Blackwork express',h:'Quedan 3 plazas',pa:'',p:'90€',c:['~2.5h','Este finde']}],
+    trabajos:['assets/fotos/proyectos/marcos-r-p01.webp','assets/fotos/proyectos/marcos-r-p02.webp','assets/fotos/proyectos/marcos-r-extra-01.jpg'],
+  },
+};
+
+const MASONRY_POSTS = [
+  {id:'carlos-vega', fotos:['assets/fotos/proyectos/carlos-vega-p01.jpg','assets/fotos/proyectos/carlos-vega-p02.jpg']},
+  {id:'maria-solano', fotos:['assets/fotos/proyectos/maria-solano-p01.jpg','assets/fotos/proyectos/maria-solano-p02.jpg','assets/fotos/proyectos/maria-solano-extra-01.avif']},
+  {id:'ana-torres', fotos:['assets/fotos/proyectos/ana-torres-p01.jpg']},
+  {id:'rafa-costa', fotos:['assets/fotos/proyectos/rafa-costa-p01.jpg','assets/fotos/proyectos/rafa-costa-p02.jpg']},
+  {id:'marcos-r', fotos:['assets/fotos/proyectos/marcos-r-p01.webp','assets/fotos/proyectos/marcos-r-p02.webp']},
+  {id:'carlos-vega', fotos:['assets/fotos/proyectos/carlos-vega-p03.jpg']},
+  {id:'maria-solano', fotos:['assets/fotos/proyectos/maria-solano-p03.jpg']},
+  {id:'ana-torres', fotos:['assets/fotos/proyectos/ana-torres-p02.jpg','assets/fotos/proyectos/ana-torres-p03.jpg']},
+  {id:'rafa-costa', fotos:['assets/fotos/proyectos/rafa-costa-extra-01.jpg','assets/fotos/proyectos/rafa-costa-extra-02.jpg']},
+  {id:'marcos-r', fotos:['assets/fotos/proyectos/marcos-r-extra-01.jpg']},
+  {id:'ana-torres', fotos:['assets/fotos/proyectos/ana-torres-extra-01.jpg','assets/fotos/proyectos/ana-torres-extra-02.jpg']},
+  {id:'rafa-costa', fotos:['assets/fotos/proyectos/rafa-costa-p03.jpg']},
+];
+
+/* ── MASONRY CON CAROUSEL ── */
+function buildMasonry(){
+  const grid = document.getElementById('masonry-grid');
+  grid.innerHTML = MASONRY_POSTS.map((post,i) => {
+    const pro = PROS[post.id];
+    const n = post.fotos.length;
+    const slides = post.fotos.map(f=>`<img src="${f}" class="sq-slide">`).join('');
+    const arrow = n>1 ? `<div class="sq-multi"><svg width="13" height="13" color="#fff"><use href="#ic-multi"/></svg></div>` : '';
+    return `<div class="sq-item" onclick="openPost(${i})">
+      <div class="sq-carousel${n>1?' multi':''}">
+        <div class="sq-slides">${slides}</div>
+        ${arrow}
+      </div>
+      <div class="sq-overlay">
+        <span class="sq-artist">${pro.nombre}</span>
+        <button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this.querySelector('svg'))"><svg width="15" height="15" color="#fff"><use href="#ic-bookmark"/></svg></button>
+      </div>
+    </div>`;
+  }).join('');
+  initCarousels();
+}
+
+/* ── CAROUSEL SWIPE (masonry) ── */
+function initCarousels(){
+  document.querySelectorAll('.sq-carousel').forEach(c=>{
+    const slides = c.querySelector('.sq-slides');
+    if(!slides) return;
+    const n = slides.children.length;
+    if(n <= 1) return;
+    let cur=0, startX=0, startY=0, tracking=false;
+
+    slides.addEventListener('touchstart', e=>{
+      startX=e.touches[0].clientX; startY=e.touches[0].clientY; tracking=true;
+    },{passive:true});
+
+    slides.addEventListener('touchend', e=>{
+      if(!tracking) return;
+      const dx=e.changedTouches[0].clientX-startX;
+      const dy=e.changedTouches[0].clientY-startY;
+      if(Math.abs(dx)>Math.abs(dy) && Math.abs(dx)>30){
+        cur = dx<0 ? Math.min(cur+1,n-1) : Math.max(cur-1,0);
+        slides.style.transform=`translateX(-${cur*100}%)`;
+        event.stopPropagation();
+      }
+      tracking=false;
+    },{passive:true});
+  });
+}
+
+/* ── ABRIR PUBLICACIÓN DESDE MASONRY ── */
+function openPost(idx){
+  const post = MASONRY_POSTS[idx];
+  openProyecto(post.fotos, post.id, 'descubrir');
+}
+
+/* ── ABRIR PERFIL PROFESIONAL ── */
+let currentProId = 'carlos-vega';
+function openPro(id){
+  const pro = PROS[id];
+  if(!pro){ toast('Perfil no disponible'); return; }
+  currentProId = id;
+
+  document.getElementById('pp-banner-img').src = pro.banner;
+  const av=document.getElementById('pp-av');
+  av.style.backgroundImage=`url(${pro.perfil})`;
+  av.style.backgroundSize='cover';
+  av.style.backgroundPosition='center';
+  document.getElementById('pp-name').textContent=pro.nombre;
+  document.getElementById('pp-meta').textContent=`${pro.estudio} · ${pro.dir}`;
+  document.getElementById('pp-rating').textContent=`${pro.rating} · ${pro.nTrabajos} trabajos · ${pro.dist}`;
+  document.getElementById('pp-chips').innerHTML=pro.estilos.map(e=>`<span class="chip">${e}</span>`).join('');
+
+  document.querySelector('#ppc-servicios .svc-list').innerHTML=pro.servicios.map((s,i)=>`
+    <div class="svc-item"${i===pro.servicios.length-1?' style="border-bottom:none"':''}>
+      <div class="svc-top"><div class="svc-name">${s.n}</div><div class="svc-price" style="font-size:${s.p==='A consultar'?'13':'16'}px;color:${s.p==='A consultar'?'var(--text2)':'var(--text)'}">${s.p}</div></div>
+      <div class="svc-desc">${s.d}</div>
+      <div style="display:flex;gap:6px">${s.c.map(c=>`<span class="chip">${c}</span>`).join('')}</div>
+    </div>`).join('');
+
+  const ofEl=document.querySelector('#ppc-ofertas .oferta-list');
+  ofEl.innerHTML=pro.ofertas.length===0
+    ?'<div style="padding:28px 16px;text-align:center;font-size:12px;color:var(--text3)">Sin ofertas activas</div>'
+    :pro.ofertas.map(o=>`
+      <div class="oferta-item">
+        <div class="oferta-tag">${o.h}</div>
+        <div class="oferta-top">
+          <div><div class="oferta-name">${o.t}</div></div>
+          <div style="text-align:right">${o.pa?`<div class="oferta-price-old">${o.pa}</div>`:''}<div class="oferta-price">${o.p}</div></div>
+        </div>
+        <div class="oferta-bottom">${o.c.map(c=>`<span class="chip">${c}</span>`).join('')}</div>
+      </div>`).join('');
+
+  document.querySelector('#ppc-trabajos .trabajos-grid').innerHTML=pro.trabajos.map((f,i)=>`
+    <div class="trabajo-item" onclick="openProyecto([PROS['${id}'].trabajos[${i}]],'${id}','${id}')"><img src="${f}" style="width:100%;height:100%;object-fit:cover"></div>`).join('');
+
+  document.getElementById('chat-pro-nombre').textContent=pro.nombre;
+  document.getElementById('pp-map-btn').setAttribute('onclick',`toast('${pro.dir}')`);
+
+  const topbar=document.getElementById('topbar');
+  topbar.innerHTML=`<button class="tb-back" onclick="go('descubrir')"><svg width="22" height="22" color="var(--text)"><use href="#ic-back"/></svg></button><span class="tb-title">${pro.nombre}</span>`;
+  document.getElementById('dtabs').style.display='none';
+  showScreen('pro-perfil');
+  ppTab('servicios');
+}
+
+/* ── ABRIR PROYECTO DETALLE ── */
+function openProyecto(fotos, proId, backTarget){
+  if(typeof fotos === 'string') fotos=[fotos];
+  const pro=PROS[proId];
+  const slidesEl=document.getElementById('pd-slides');
+  slidesEl.style.transform='translateX(0)';
+  slidesEl.innerHTML=fotos.map(f=>`<img src="${f}" style="min-width:100%;width:100%;display:block;object-fit:cover;aspect-ratio:1">`).join('');
+
+  const pdWrap = slidesEl.parentElement;
+  const oldHint = pdWrap.querySelector('.pd-swipe-hint');
+  if(oldHint) oldHint.remove();
+  if(fotos.length>1){
+    const hint=document.createElement('div');
+    hint.className='pd-swipe-hint';
+    hint.innerHTML='<svg width="12" height="12" color="#fff"><use href="#ic-chevron"/></svg>';
+    pdWrap.appendChild(hint);
+    initDetailCarousel(slidesEl, fotos.length, hint);
+  } else {
+    initDetailCarousel(slidesEl, 1, null);
+  }
+
+  if(pro){
+    document.getElementById('pdt-artista').textContent=pro.nombre;
+    document.getElementById('pdt-estudio').textContent=pro.estudio;
+    document.getElementById('pd-av').innerHTML=`<img src="${pro.perfil}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+    document.getElementById('pd-nombre').textContent=pro.nombre;
+    document.getElementById('pd-rating').textContent=`${pro.rating} · ${pro.nTrabajos} trabajos · ${pro.dist}`;
+    document.getElementById('pd-estilos').textContent=pro.estilos.join(' · ').toUpperCase();
+    document.getElementById('pd-estudio-nombre').textContent=pro.estudio;
+    document.getElementById('pd-estudio-dir').textContent=`${pro.dir} · 3 tatuadores`;
+    document.getElementById('pd-estudio-info').textContent='4.8 · Abierto ahora';
+    document.getElementById('pd-ver-btn').setAttribute('onclick',`openPro('${proId}')`);
+  }
+  const back = backTarget||proId;
+  const topbar=document.getElementById('topbar');
+  const backFn = back==='descubrir' ? `go('descubrir')` : `openPro('${back}')`;
+  topbar.innerHTML=`<button class="tb-back" onclick="${backFn}"><svg width="22" height="22" color="var(--text)"><use href="#ic-back"/></svg></button><span class="tb-title"></span>`;
+  document.getElementById('dtabs').style.display='none';
+  showScreen('proyecto-detalle');
+  pdTab('artista');
+}
+
+function initDetailCarousel(slidesEl, n, hint){
+  if(n<=1) return;
+  let cur=0, startX=0, startY=0, tracking=false;
+  slidesEl.addEventListener('touchstart',e=>{startX=e.touches[0].clientX;startY=e.touches[0].clientY;tracking=true;},{passive:true});
+  slidesEl.addEventListener('touchend',e=>{
+    if(!tracking)return;
+    const dx=e.changedTouches[0].clientX-startX;
+    const dy=e.changedTouches[0].clientY-startY;
+    if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>30){
+      cur=dx<0?Math.min(cur+1,n-1):Math.max(cur-1,0);
+      slidesEl.style.transform=`translateX(-${cur*100}%)`;
+      if(hint) hint.style.opacity='0';
+    }
+    tracking=false;
+  },{passive:true});
+}
+
+/* ── NAVEGACIÓN ── */
 let toastT;
 function toast(msg){
   const t=document.getElementById('toast');
@@ -1068,20 +1310,14 @@ function showScreen(id){
   document.getElementById('main').scrollTop=0;
 }
 
-const SUB={
-  'proyecto-detalle':{title:'',back:'descubrir'},
-  'estudio-detalle':{title:'Blackline Studio',back:'descubrir'},
-  'pro-perfil':{title:'Carlos Vega',back:'descubrir'},
-};
-
 function go(id){
-  const cfg=SUB[id];
-  const topbar=document.getElementById('topbar');
-  document.getElementById('dtabs').style.display='none';
-  if(cfg){
-    topbar.innerHTML=`<button class="tb-back" onclick="go('${cfg.back}')"><svg width="22" height="22" color="var(--text)"><use href="#ic-back"/></svg></button><span class="tb-title">${cfg.title}</span>`;
-  } else {
-    resetTopbar();
+  if(id==='descubrir'){switchTab('descubrir');return;}
+  if(id==='estudio-detalle'){
+    const topbar=document.getElementById('topbar');
+    topbar.innerHTML=`<button class="tb-back" onclick="go('descubrir')"><svg width="22" height="22" color="var(--text)"><use href="#ic-back"/></svg></button><span class="tb-title">Blackline Studio</span>`;
+    document.getElementById('dtabs').style.display='none';
+    showScreen('estudio-detalle');
+    return;
   }
   showScreen(id);
 }
@@ -1125,13 +1361,14 @@ function pdTab(tab){
 }
 
 function toggleHeart(el){
-  const btn=el.closest?el.closest('.heart-btn,.estudio-heart-btn,.pd-save-btn'):{classList:{contains:()=>false,add:()=>{},remove:()=>{}}};
   if(el.tagName==='svg'||el.tagName==='SVG'){
     const use=el.querySelector('use');
     if(!use)return;
-    const saved=use.getAttribute('href')==='#ic-heart-fill';
-    use.setAttribute('href',saved?'#ic-heart':'#ic-heart-fill');
-    el.style.color=saved?'var(--text3)':'var(--red)';
+    const href=use.getAttribute('href');
+    const saved=href.endsWith('-fill');
+    const base=saved?href.replace('-fill',''):href;
+    use.setAttribute('href',saved?base:base+'-fill');
+    if(!href.includes('bookmark'))el.style.color=saved?'var(--text3)':'var(--red)';
     toast(saved?'Eliminado de guardados':'Guardado');
   }
 }
@@ -1153,6 +1390,9 @@ function sendMsg(){
   msgs.appendChild(d);inp.value='';
   document.querySelector('.chat-scroll').scrollTop=99999;
 }
+
+/* ── INIT ── */
+buildMasonry();
 </script>
 </body>
 </html>
