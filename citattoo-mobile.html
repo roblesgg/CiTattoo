@@ -269,6 +269,37 @@ body{background:#f5f5f5;display:flex;align-items:center;justify-content:center;h
 .cita-actions{display:flex;gap:8px}
 .cita-btn{width:36px;height:36px;border:1px solid var(--border);border-radius:50%;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
 .cita-btn:active{background:var(--bg)}
+
+/* ── CITA DETAIL ── */
+.cita-detail-wrap{display:none;position:fixed;inset:0;z-index:150;background:var(--bg);flex-direction:column}
+.cita-detail-wrap.on{display:flex}
+.cd-scroll{flex:1;overflow-y:auto}
+.cd-hero{padding:16px;border-bottom:1px solid var(--border)}
+.cd-artist-row{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.cd-av{width:40px;height:40px;border-radius:50%;overflow:hidden;flex-shrink:0;border:1px solid var(--border)}
+.cd-av img{width:100%;height:100%;object-fit:cover}
+.cd-artist-name{font-size:14px;font-weight:700;color:var(--text)}
+.cd-studio{font-size:12px;color:var(--text2)}
+.cd-title{font-size:20px;font-weight:800;color:var(--text);margin-bottom:8px;letter-spacing:-.3px}
+.cd-meta-row{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);margin-bottom:12px;flex-wrap:wrap}
+.cd-pbar-wrap{margin-bottom:4px}
+.cd-pbar{height:5px;background:var(--border);border-radius:3px;overflow:hidden;margin:6px 0 4px}
+.cd-pfill{height:100%;background:var(--accent);border-radius:3px}
+.cd-pbar-label{font-size:11px;color:var(--text3)}
+
+.cd-section{padding:16px 16px 0}
+.cd-section-title{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.8px;text-transform:uppercase;margin-bottom:10px}
+.cd-photos{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.cd-photo{width:110px;height:110px;border-radius:12px;overflow:hidden;flex-shrink:0;background:var(--bg);border:1px solid var(--border)}
+.cd-photo img{width:100%;height:100%;object-fit:cover}
+.cd-photo-add{width:110px;height:110px;border-radius:12px;border:1.5px dashed var(--border2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;flex-shrink:0;cursor:pointer;color:var(--text3)}
+.cd-photo-add span{font-size:11px;font-weight:600}
+
+.cd-chat-btn{display:flex;align-items:center;justify-content:center;gap:10px;background:var(--accent);color:#fff;border:none;border-radius:14px;padding:15px 20px;font-size:15px;font-weight:700;width:calc(100% - 32px);margin:20px 16px 0;cursor:pointer;letter-spacing:.1px}
+.cd-chat-btn svg{flex-shrink:0}
+.cd-actions-row{display:flex;gap:8px;padding:12px 16px 8px}
+.cd-action{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px;border:1px solid var(--border);border-radius:12px;background:transparent;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer}
+.cd-action:active{background:var(--bg)}
 .status-pill{font-size:9px;font-weight:700;letter-spacing:.5px;padding:3px 9px;border-radius:100px;border:1px solid var(--border);color:var(--text2);text-transform:uppercase;white-space:nowrap;flex-shrink:0}
 .status-today{background:var(--text);color:#fff;border-color:var(--text)}
 .info-box{background:var(--bg);border-radius:8px;padding:10px 12px;font-size:11px;color:var(--text2);line-height:1.55;margin-bottom:2px}
@@ -987,7 +1018,7 @@ body{background:#f5f5f5;display:flex;align-items:center;justify-content:center;h
   <div class="sec-label">Próximas</div>
 
   <!-- Hoy -->
-  <div class="cita-card">
+  <div class="cita-card" onclick="openCitaDetail('cita-hoy')">
     <div class="cita-top">
       <div class="cita-name-col">
         <div class="cita-artist">Carlos Vega</div>
@@ -1006,21 +1037,10 @@ body{background:#f5f5f5;display:flex;align-items:center;justify-content:center;h
       <div class="pbar"><div class="pfill" style="width:50%"></div></div>
       <span class="pbar-label">2/4 sesiones</span>
     </div>
-    <div class="cita-actions">
-      <button class="cita-btn" onclick="openChat()" title="Chat">
-        <svg width="15" height="15" color="var(--text2)"><use href="#ic-chat"/></svg>
-      </button>
-      <button class="cita-btn" onclick="toast('Gran Vía 42, Madrid')" title="Mapa">
-        <svg width="15" height="15" color="var(--text2)"><use href="#ic-map"/></svg>
-      </button>
-      <button class="cita-btn" onclick="toast('Consentimiento firmado ✓')" title="Documento">
-        <svg width="15" height="15" color="var(--text2)"><use href="#ic-doc"/></svg>
-      </button>
-    </div>
   </div>
 
   <!-- Próxima -->
-  <div class="cita-card" style="opacity:.6">
+  <div class="cita-card" style="opacity:.7" onclick="openCitaDetail('cita-proxima')">
     <div class="cita-top">
       <div class="cita-name-col">
         <div class="cita-artist">Carlos Vega</div>
@@ -1042,7 +1062,7 @@ body{background:#f5f5f5;display:flex;align-items:center;justify-content:center;h
   <div class="sec-label">Pasadas</div>
 
   <!-- Pasada -->
-  <div class="cita-card" style="opacity:.4">
+  <div class="cita-card" style="opacity:.5" onclick="openCitaDetail('cita-pasada')">
     <div class="cita-top">
       <div class="cita-name-col">
         <div class="cita-artist">Carlos Vega</div>
@@ -1254,6 +1274,61 @@ body{background:#f5f5f5;display:flex;align-items:center;justify-content:center;h
     <button class="chat-send" onclick="sendMsg()">
       <svg width="16" height="16" color="#fff"><use href="#ic-send"/></svg>
     </button>
+  </div>
+</div>
+
+<!-- ══ CITA DETAIL ══ -->
+<div class="cita-detail-wrap" id="cita-detail-wrap">
+  <div class="topbar" id="cd-topbar">
+    <button class="tb-back" onclick="closeCitaDetail()">
+      <svg width="22" height="22" color="var(--text)"><use href="#ic-back"/></svg>
+    </button>
+    <span class="tb-title" id="cd-tb-title">Cita</span>
+  </div>
+  <div class="cd-scroll">
+    <div class="cd-hero">
+      <div class="cd-artist-row">
+        <div class="cd-av"><img id="cd-av-img" src="" alt=""></div>
+        <div>
+          <div class="cd-artist-name" id="cd-artist-name"></div>
+          <div class="cd-studio" id="cd-studio"></div>
+        </div>
+        <span class="status-pill" id="cd-status-pill" style="margin-left:auto"></span>
+      </div>
+      <div class="cd-title" id="cd-title"></div>
+      <div class="cd-meta-row" id="cd-meta"></div>
+      <div class="cd-pbar-wrap" id="cd-pbar-wrap">
+        <div class="cd-pbar"><div class="cd-pfill" id="cd-pfill"></div></div>
+        <div class="cd-pbar-label" id="cd-pbar-label"></div>
+      </div>
+    </div>
+
+    <div class="cd-section">
+      <div class="cd-section-title">Fotos de referencia</div>
+      <div class="cd-photos" id="cd-refs"></div>
+    </div>
+
+    <div class="cd-section" style="margin-top:18px">
+      <div class="cd-section-title">Progreso del proyecto</div>
+      <div class="cd-photos" id="cd-progress"></div>
+    </div>
+
+    <button class="cd-chat-btn" id="cd-chat-btn" onclick="openCitaChat()">
+      <svg width="20" height="20" color="#fff"><use href="#ic-chat"/></svg>
+      <span id="cd-chat-label">Chat con el tatuador</span>
+    </button>
+
+    <div class="cd-actions-row">
+      <button class="cd-action" id="cd-map-btn" onclick="toast('Abriendo mapa...')">
+        <svg width="16" height="16" color="var(--text2)"><use href="#ic-map"/></svg>
+        Ver ubicación
+      </button>
+      <button class="cd-action" onclick="toast('Consentimiento firmado ✓')">
+        <svg width="16" height="16" color="var(--text2)"><use href="#ic-doc"/></svg>
+        Consentimiento
+      </button>
+    </div>
+    <div style="height:24px"></div>
   </div>
 </div>
 
@@ -1749,6 +1824,97 @@ document.querySelectorAll('.overlay').forEach(o=>{
 
 function openChat(){document.getElementById('chat-wrap').classList.add('on');}
 function closeChat(){document.getElementById('chat-wrap').classList.remove('on');}
+
+/* ── CITA DETAIL ── */
+const CITAS_DATA = {
+  'cita-hoy':{
+    titulo:'Manga japonesa',
+    sesion:'Sesión 2 de 4',
+    artista:'Carlos Vega',
+    estudio:'Blackline Studio',
+    dir:'Gran Vía 42, Madrid',
+    av:'assets/fotos/perfil-tatuadores/carlos-vega.jpg',
+    when:'Mié 11 Jun · 10:00 · ~4h',
+    status:'Hoy',
+    statusClass:'status-today',
+    sesiones:2,totalSesiones:4,
+    refs:[
+      'assets/fotos/proyectos/carlos-vega-p01.jpg',
+      'assets/fotos/proyectos/carlos-vega-p02.jpg',
+      'assets/fotos/proyectos/carlos-vega-p03.jpg',
+    ],
+    progreso:[
+      'assets/fotos/proyectos/carlos-vega-p01.jpg',
+    ],
+  },
+  'cita-proxima':{
+    titulo:'Manga japonesa',
+    sesion:'Sesión 3 de 4',
+    artista:'Carlos Vega',
+    estudio:'Blackline Studio',
+    dir:'Gran Vía 42, Madrid',
+    av:'assets/fotos/perfil-tatuadores/carlos-vega.jpg',
+    when:'Mié 25 Jun · 10:00 · ~4h',
+    status:'En 14 días',
+    statusClass:'',
+    sesiones:2,totalSesiones:4,
+    refs:[
+      'assets/fotos/proyectos/carlos-vega-p01.jpg',
+      'assets/fotos/proyectos/carlos-vega-p02.jpg',
+      'assets/fotos/proyectos/carlos-vega-p03.jpg',
+    ],
+    progreso:[
+      'assets/fotos/proyectos/carlos-vega-p01.jpg',
+    ],
+  },
+  'cita-pasada':{
+    titulo:'Manga japonesa',
+    sesion:'Sesión 1 de 4',
+    artista:'Carlos Vega',
+    estudio:'Blackline Studio',
+    dir:'Gran Vía 42, Madrid',
+    av:'assets/fotos/perfil-tatuadores/carlos-vega.jpg',
+    when:'28 May · 10:00 · ~5h',
+    status:'Completada',
+    statusClass:'',
+    sesiones:1,totalSesiones:4,
+    refs:[
+      'assets/fotos/proyectos/carlos-vega-p01.jpg',
+      'assets/fotos/proyectos/carlos-vega-p02.jpg',
+    ],
+    progreso:[],
+  },
+};
+let _citaActual = null;
+function openCitaDetail(id){
+  const c = CITAS_DATA[id]; if(!c) return;
+  _citaActual = c;
+  document.getElementById('cd-tb-title').textContent = c.titulo;
+  document.getElementById('cd-av-img').src = c.av;
+  document.getElementById('cd-artist-name').textContent = c.artista;
+  document.getElementById('cd-studio').textContent = c.estudio;
+  const pill = document.getElementById('cd-status-pill');
+  pill.textContent = c.status;
+  pill.className = 'status-pill' + (c.statusClass ? ' '+c.statusClass : '');
+  document.getElementById('cd-title').textContent = c.titulo + ' — ' + c.sesion;
+  document.getElementById('cd-meta').innerHTML =
+    `<svg width="11" height="11" color="var(--text3)"><use href="#ic-calendar"/></svg> ${c.when}`;
+  document.getElementById('cd-pfill').style.width = (c.sesiones/c.totalSesiones*100)+'%';
+  document.getElementById('cd-pbar-label').textContent = c.sesiones+' de '+c.totalSesiones+' sesiones completadas';
+  // Referencias
+  document.getElementById('cd-refs').innerHTML = c.refs.map(f=>
+    `<div class="cd-photo"><img src="${f}" alt=""></div>`
+  ).join('') + `<div class="cd-photo-add"><svg width="22" height="22" color="var(--text3)"><use href="#ic-attach"/></svg><span>Añadir</span></div>`;
+  // Progreso
+  const progDiv = document.getElementById('cd-progress');
+  progDiv.innerHTML = c.progreso.map(f=>
+    `<div class="cd-photo"><img src="${f}" alt=""></div>`
+  ).join('') + `<div class="cd-photo-add"><svg width="22" height="22" color="var(--text3)"><use href="#ic-attach"/></svg><span>Añadir</span></div>`;
+  document.getElementById('cd-chat-label').textContent = 'Chat con ' + c.artista;
+  document.getElementById('cita-detail-wrap').classList.add('on');
+}
+function closeCitaDetail(){document.getElementById('cita-detail-wrap').classList.remove('on');}
+function openCitaChat(){if(_citaActual){document.getElementById('chat-pro-nombre').textContent=_citaActual.artista;}openChat();}
 function sendMsg(){
   const inp=document.getElementById('chat-inp');
   const txt=inp.value.trim();if(!txt)return;
