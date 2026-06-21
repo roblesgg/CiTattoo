@@ -1715,8 +1715,9 @@ function showFavTab(tab){
 }
 
 function setMode(mode){
-  document.getElementById('bnav').style.display=mode==='c'?'flex':'none';
-  if(mode==='c')switchTab('descubrir');
+  if(mode==='t'){window.location.href='citattoo-pro.html';return;}
+  document.getElementById('bnav').style.display='flex';
+  switchTab('descubrir');
 }
 
 function showDTab(tab){
