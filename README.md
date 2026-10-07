@@ -1,47 +1,57 @@
+<a href="https://dripdev.dev"><img src="docs/readme/dripdev.png" alt="Un producto de DripDev" width="100%"></a>
+
 <p align="center">
-  <img src="docs/banner.png" alt="CiTattoo: encuentra a tu tatuador y pide cita" width="100%">
+  <img src="docs/readme/portada.png" alt="Ci·Tattoo: vista de cliente y vista profesional" width="100%">
 </p>
 
 <p align="center">
-  <a href="https://roblesgg.github.io/CiTattoo/"><img src="https://img.shields.io/badge/demo-abrir%20en%20el%20m%C3%B3vil-FB944E" alt="Ver la demo"></a>
-  <img src="https://img.shields.io/badge/estado-prototipo-8F72EB" alt="Prototipo">
-  <img src="https://img.shields.io/badge/HTML%20%C2%B7%20CSS%20%C2%B7%20JS-sin%20dependencias-121016" alt="Sin dependencias">
+  <a href="https://roblesgg.github.io/CiTattoo/"><img src="https://img.shields.io/badge/demo-abrir%20en%20el%20m%C3%B3vil-0A0A0A?style=for-the-badge" alt="Abrir la demo"></a>
+  <img src="https://img.shields.io/badge/vista-pro-C9A227?style=for-the-badge" alt="Vista profesional">
+  <img src="https://img.shields.io/badge/estado-prototipo-F0F0F0?style=for-the-badge" alt="Prototipo">
 </p>
 
-**CiTattoo** es el prototipo de una app para encontrar tatuador y pedir cita sin perseguir a nadie por mensajes. Tiene dos caras: la del cliente, que busca inspiración y contacta con el tatuador, y la del profesional, que gestiona su agenda.
+**Ci·Tattoo** tiene dos caras.
 
-<!-- Capturas: añade las imágenes en docs/capturas/ y descomenta esta sección.
-## Capturas
+- **Si quieres tatuarte:** te inspiras, encuentras a tu tatuador, le escribes y sigues tus sesiones.
+- **Si tatúas:** llevas el estudio desde el móvil: agenda del equipo, caja y comisiones.
+
 <p align="center">
-  <img src="docs/capturas/inicio.png" width="24%" alt="Inicio con inspiración">
-  <img src="docs/capturas/tatuador.png" width="24%" alt="Perfil de un tatuador">
-  <img src="docs/capturas/reserva.png" width="24%" alt="Pedir cita">
-  <img src="docs/capturas/pro.png" width="24%" alt="Vista profesional">
+  <img src="docs/readme/capturas.png" alt="Elegir perfil, agenda, caja y equipo" width="100%">
 </p>
--->
 
 ## Qué puedes hacer
 
-- **Inspirarte** en un muro de tatuajes reales.
-- **Conocer a cada tatuador**: su estilo, sus trabajos y su estudio.
-- **Escribirle** por mensaje para pedir cita, desde su perfil.
-- **Vista profesional** para el tatuador, con su agenda de citas.
+**🖤 Como cliente**
+
+- **Inspirarte** en un muro de tatuajes y guardar los que te gustan.
+- **Conocer a cada tatuador:** su estilo, sus trabajos y su estudio.
+- **Escribirle** para pedir cita, desde su perfil.
+- **Mis citas:** cada sesión de tu pieza, con su progreso.
+
+**✒️ Como profesional**
+
+- **Hoy:** lo recaudado, la próxima cita y cómo va cada artista.
+- **Agenda** del estudio por horas y por artista.
+- **Caja:** lo cobrado y lo pendiente de cobro.
+- **Equipo:** citas, recaudación y comisión de cada artista.
 
 ## Pruébala
 
-Abre la [demo](https://roblesgg.github.io/CiTattoo/) desde el móvil. Para ver la cara del profesional, pulsa **Soy profesional**.
+Abre la [demo](https://roblesgg.github.io/CiTattoo/) desde el móvil. Al entrar eliges si eres cliente o profesional.
 
 ## Hecho con
 
-Una sola página HTML con CSS y JavaScript, sin framework ni servidor, publicada con GitHub Pages.
+HTML, CSS y JavaScript en una sola página, sin framework ni servidor, publicada con GitHub Pages.
 
-## Estado
+<details>
+<summary><b>Estado</b></summary>
 
-Prototipo de diseño. Los datos son de ejemplo y todavía no hay reservas reales.
+<br>
+
+Prototipo de diseño: los datos son de ejemplo y todavía no hay reservas reales. Las capturas de arriba son de la demo real.
+
+</details>
 
 ---
 
-<p align="center">
-  <img src="docs/dripdev.png" width="40" alt=""><br>
-  Un producto de <b>DripDev</b> · hecho por Álvaro Robles
-</p>
+<p align="center"><sub>Un producto de <a href="https://dripdev.dev"><b>DripDev</b></a> · hecho por Álvaro Robles</sub></p>
